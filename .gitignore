@@ -1,0 +1,20 @@
+# iPython Notebook Checkpoints
+.ipynb_checkpoints/
+
+# Cache
+
+
+# Scratch Work
+Isomantics.ipynb
+
+# Google Auth
+client_secrets.json
+gauth.yml
+
+# Spark Stuff
+derby.log
+metastore_db
+spark.ipynb
+
+# Research Papers
+papers/
