@@ -140,7 +140,7 @@ if __name__ == "__main__":
     pca_EDA_results = []
 
     # For each language
-    for lg in gensim_lgs[0:2]:
+    for lg in gensim_lgs:
         # Load embedding from tsv file
         vocab, vectors = load_embedding('../data/gensim/' + lg + '/' +
                                         lg + '.tsv')
