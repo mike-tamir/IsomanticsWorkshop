@@ -1,20 +1,24 @@
 # iPython Notebook Checkpoints
 .ipynb_checkpoints/
 
-# Cache
+# Spark Stuff
+derby.log
+metastore_db
 
-
-# Scratch Work
-Isomantics.ipynb
+# Research Papers
+papers/
 
 # Google Auth
 client_secrets.json
 gauth.yml
 
-# Spark Stuff
-derby.log
-metastore_db
+# Data
+data/
+
+# Pickle
+pickle/
+
+# Scratch Notebooks
+Isomantics.ipynb
 spark.ipynb
 
-# Research Papers
-papers/
