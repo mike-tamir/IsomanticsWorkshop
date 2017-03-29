@@ -60,9 +60,6 @@ def pickle_rw(loc, *tuples, write=True):
 
 
 if __name__ == "__main__":
-    # Set Path for Retrieved Files
-    path = '/Users/michaelseeber/Documents/Projects/Data/Isomantics/'
-
     # Set google drive file ids and associated languages
     gensim_fileids = """0B0ZXk88koS2KX01rR2dyRWpHNTA
 0B0ZXk88koS2KYkd5OVExR3o1V1k
@@ -160,12 +157,12 @@ if __name__ == "__main__":
     drive = GoogleDrive(gauth)
 
     # Download all file ids from google
-    retrieve_files(drive, gensim_fileids, path + 'gensim/',
+    retrieve_files(drive, gensim_fileids, 'data/gensim/',
                    [lg + '.zip' for lg in gensim_lgs])
 
     # Unzip all files
-    unzip_files(path + 'gensim/', gensim_lgs)
+    unzip_files('data/gensim/', gensim_lgs)
 
     # Pickle objects for later
-    pickle_rw(path + 'output/', ('gensim_languages', gensim_languages),
+    pickle_rw('pickle/', ('gensim_languages', gensim_languages),
               ('gensim_lgs', gensim_lgs))
