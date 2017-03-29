@@ -1,6 +1,9 @@
 # iPython Notebook Checkpoints
 .ipynb_checkpoints/
 
+# Cache
+__pycache__/
+
 # Spark Stuff
 derby.log
 metastore_db
