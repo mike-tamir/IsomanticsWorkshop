@@ -1,6 +1,6 @@
 # Polyglot EDA  
 ## af  
-- Vocabulary Size = 49004  
+- Vocabulary Size = 49,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/af_polyglot_norm.png)  

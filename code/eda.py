@@ -142,7 +142,8 @@ def report_EDA(lgs, languages, embedding):
     for i in range(len(norm_EDA_results)):
         lg = lgs[i]
         md += '## ' + languages[i] + '  \n'
-        md += '- Vocabulary Size = ' + str(vocabulary_size) + '  \n'
+        md += '- Vocabulary Size = ' + '{:,.0f}'.format(vocabulary_size) +\
+            '  \n'
         md += '- Embedding Length = ' + str(vector_length) + '  \n'
 
         md += '#### Embedding L2 Norms  \n'

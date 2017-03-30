@@ -1,6 +1,6 @@
 # Gensim EDA  
 ## Bengali  
-- Vocabulary Size = 10059  
+- Vocabulary Size = 10,059  
 - Embedding Length = 300  
 #### Embedding L2 Norms  
 ![](../images/bn_gensim_norm.png)  
