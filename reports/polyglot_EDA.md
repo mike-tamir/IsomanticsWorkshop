@@ -1,5 +1,7 @@
 # Polyglot EDA  
 ## af  
+- Vocabulary Size = 49004  
+- Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/af_polyglot_norm.png)  
 - Anderson-Darling Test Statistic: 1887.16  

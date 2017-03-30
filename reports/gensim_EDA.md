@@ -1,5 +1,7 @@
 # Gensim EDA  
 ## Bengali  
+- Vocabulary Size = 10059  
+- Embedding Length = 300  
 #### Embedding L2 Norms  
 ![](../images/bn_gensim_norm.png)  
 - Anderson-Darling Test Statistic: 290.12  
