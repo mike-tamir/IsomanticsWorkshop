@@ -64,6 +64,7 @@ def norm_EDA(vectors, lg, embedding):
 
     # Histogram compared to normal dist
     plt.figure(figsize=(10, 6))
+    plt.xlim((-3, 5))
     plt.hist(vectors_norm_normalized, bins=100, normed=True)
     x = np.linspace(-3, 3, 100)
     plt.plot(x, norm.pdf(x, 0, 1), color='r', linewidth=3)
@@ -100,14 +101,16 @@ def pca_EDA(vectors, lg, embedding):
     embedding = gensim, polyglot, etc."""
     vectors_ss = StandardScaler().fit_transform(vectors)
     pca = PCA().fit(vectors_ss)
+    n = pca.n_components_
 
     plt.figure(figsize=(10, 6))
-    n = pca.n_components_
-    plt.plot(range(1, n + 1), np.cumsum(pca.explained_variance_ratio_))
-    plt.plot(range(1, n + 1), np.asarray(range(1, n + 1)) / 300)
+    plt.xlim((0, n))
+    plt.ylim((0, 1))
+    plt.plot(range(n + 1), [0] + np.cumsum(pca.explained_variance_ratio_).
+             tolist())
+    plt.plot(range(n + 1), np.asarray(range(n + 1)) / n)
     plt.xlabel('Number of Eigenvectors')
     plt.ylabel('Explained Variance')
-    plt.ylim((0, 1))
     plt.savefig('../images/' + lg + '_' + embedding + '_isotropy.png')
     plt.close('all')
 
@@ -139,6 +142,8 @@ def report_EDA(lgs, languages, embedding):
     for i in range(len(norm_EDA_results)):
         lg = lgs[i]
         md += '## ' + languages[i] + '  \n'
+        md += '- Vocabulary Size = ' + str(vocabulary_size) + '  \n'
+        md += '- Embedding Length = ' + str(vector_length) + '  \n'
 
         md += '#### Embedding L2 Norms  \n'
         md += '![](../images/' + lg + '_' + embedding + '_norm.png)  \n'
@@ -181,6 +186,7 @@ if __name__ == "__main__":
         for lg in lgs[:1]:
             # Load vocab and vectors for lg/embedding
             vocab, vectors = vocab_vectors_load(lg, embedding)
+            vocabulary_size, vector_length = vectors.shape
 
             # EDA on the norm of the embedding vectors
             norm_EDA_results.append(norm_EDA(vectors, lg, embedding))
