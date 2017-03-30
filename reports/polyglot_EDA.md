@@ -1,6 +1,6 @@
 # Polyglot EDA  
 ## af  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 49,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/af_polyglot_norm.png)  
@@ -19,7 +19,7 @@
 - Isotropy: 0.26  
 
 ## als  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 52,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/als_polyglot_norm.png)  
@@ -38,7 +38,7 @@
 - Isotropy: 0.21  
 
 ## am  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 10,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/am_polyglot_norm.png)  
@@ -57,7 +57,7 @@
 - Isotropy: 0.16  
 
 ## an  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 34,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/an_polyglot_norm.png)  
@@ -95,7 +95,7 @@
 - Isotropy: 0.6  
 
 ## arz  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 25,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/arz_polyglot_norm.png)  
@@ -114,7 +114,7 @@
 - Isotropy: 0.18  
 
 ## as  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 22,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/as_polyglot_norm.png)  
@@ -133,7 +133,7 @@
 - Isotropy: 0.15  
 
 ## ast  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 37,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/ast_polyglot_norm.png)  
@@ -171,7 +171,7 @@
 - Isotropy: 0.29  
 
 ## ba  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 14,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/ba_polyglot_norm.png)  
@@ -190,7 +190,7 @@
 - Isotropy: 0.2  
 
 ## bar  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 22,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/bar_polyglot_norm.png)  
@@ -209,7 +209,7 @@
 - Isotropy: 0.16  
 
 ## be  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 93,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/be_polyglot_norm.png)  
@@ -247,7 +247,7 @@
 - Isotropy: 0.51  
 
 ## bn  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 55,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/bn_polyglot_norm.png)  
@@ -266,7 +266,7 @@
 - Isotropy: 0.23  
 
 ## bo  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 4,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/bo_polyglot_norm.png)  
@@ -285,7 +285,7 @@
 - Isotropy: 0.21  
 
 ## bpy  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 9,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/bpy_polyglot_norm.png)  
@@ -304,7 +304,7 @@
 - Isotropy: 0.22  
 
 ## br  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 39,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/br_polyglot_norm.png)  
@@ -323,7 +323,7 @@
 - Isotropy: 0.26  
 
 ## bs  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 85,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/bs_polyglot_norm.png)  
@@ -342,7 +342,7 @@
 - Isotropy: 0.26  
 
 ## ca  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 107,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/ca_polyglot_norm.png)  
@@ -361,7 +361,7 @@
 - Isotropy: 0.44  
 
 ## ce  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 13,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/ce_polyglot_norm.png)  
@@ -380,7 +380,7 @@
 - Isotropy: 0.18  
 
 ## ceb  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 51,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/ceb_polyglot_norm.png)  
@@ -418,7 +418,7 @@
 - Isotropy: 0.44  
 
 ## cv  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 17,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/cv_polyglot_norm.png)  
@@ -437,7 +437,7 @@
 - Isotropy: 0.18  
 
 ## cy  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 38,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/cy_polyglot_norm.png)  
@@ -494,7 +494,7 @@
 - Isotropy: 0.49  
 
 ## diq  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 6,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/diq_polyglot_norm.png)  
@@ -513,7 +513,7 @@
 - Isotropy: 0.16  
 
 ## dv  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 12,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/dv_polyglot_norm.png)  
@@ -665,7 +665,7 @@
 - Isotropy: 0.38  
 
 ## fi  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 139,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/fi_polyglot_norm.png)  
@@ -684,7 +684,7 @@
 - Isotropy: 0.44  
 
 ## fo  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 12,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/fo_polyglot_norm.png)  
@@ -722,7 +722,7 @@
 - Isotropy: 0.47  
 
 ## fy  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 41,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/fy_polyglot_norm.png)  
@@ -741,7 +741,7 @@
 - Isotropy: 0.23  
 
 ## ga  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 25,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/ga_polyglot_norm.png)  
@@ -760,7 +760,7 @@
 - Isotropy: 0.22  
 
 ## gan  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 3,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/gan_polyglot_norm.png)  
@@ -779,7 +779,7 @@
 - Isotropy: 0.22  
 
 ## gd  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 9,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/gd_polyglot_norm.png)  
@@ -817,7 +817,7 @@
 - Isotropy: 0.34  
 
 ## gu  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 52,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/gu_polyglot_norm.png)  
@@ -836,7 +836,7 @@
 - Isotropy: 0.21  
 
 ## gv  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 7,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/gv_polyglot_norm.png)  
@@ -855,7 +855,7 @@
 - Isotropy: 0.17  
 
 ## he  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 125,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/he_polyglot_norm.png)  
@@ -874,7 +874,7 @@
 - Isotropy: 0.45  
 
 ## hi  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 94,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/hi_polyglot_norm.png)  
@@ -893,7 +893,7 @@
 - Isotropy: 0.3  
 
 ## hif  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 4,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/hif_polyglot_norm.png)  
@@ -931,7 +931,7 @@
 - Isotropy: 0.4  
 
 ## hsb  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 10,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/hsb_polyglot_norm.png)  
@@ -950,7 +950,7 @@
 - Isotropy: 0.18  
 
 ## ht  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 6,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/ht_polyglot_norm.png)  
@@ -969,7 +969,7 @@
 - Isotropy: 0.23  
 
 ## hu  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 153,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/hu_polyglot_norm.png)  
@@ -988,7 +988,7 @@
 - Isotropy: 0.43  
 
 ## hy  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 47,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/hy_polyglot_norm.png)  
@@ -1007,7 +1007,7 @@
 - Isotropy: 0.23  
 
 ## ia  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 13,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/ia_polyglot_norm.png)  
@@ -1045,7 +1045,7 @@
 - Isotropy: 0.38  
 
 ## ilo  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 6,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/ilo_polyglot_norm.png)  
@@ -1064,7 +1064,7 @@
 - Isotropy: 0.18  
 
 ## io  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 14,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/io_polyglot_norm.png)  
@@ -1083,7 +1083,7 @@
 - Isotropy: 0.22  
 
 ## is  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 55,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/is_polyglot_norm.png)  
@@ -1121,7 +1121,7 @@
 - Isotropy: 0.36  
 
 ## ja  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 145,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/ja_polyglot_norm.png)  
@@ -1140,7 +1140,7 @@
 - Isotropy: 0.32  
 
 ## jv  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 42,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/jv_polyglot_norm.png)  
@@ -1159,7 +1159,7 @@
 - Isotropy: 0.22  
 
 ## ka  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 98,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/ka_polyglot_norm.png)  
@@ -1197,7 +1197,7 @@
 - Isotropy: 0.33  
 
 ## km  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 14,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/km_polyglot_norm.png)  
@@ -1235,7 +1235,7 @@
 - Isotropy: 0.23  
 
 ## ko  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 121,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/ko_polyglot_norm.png)  
@@ -1254,7 +1254,7 @@
 - Isotropy: 0.39  
 
 ## ku  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 24,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/ku_polyglot_norm.png)  
@@ -1273,7 +1273,7 @@
 - Isotropy: 0.19  
 
 ## ky  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 53,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/ky_polyglot_norm.png)  
@@ -1292,7 +1292,7 @@
 - Isotropy: 0.25  
 
 ## la  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 64,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/la_polyglot_norm.png)  
@@ -1311,7 +1311,7 @@
 - Isotropy: 0.25  
 
 ## lb  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 40,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/lb_polyglot_norm.png)  
@@ -1330,7 +1330,7 @@
 - Isotropy: 0.23  
 
 ## li  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 21,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/li_polyglot_norm.png)  
@@ -1349,7 +1349,7 @@
 - Isotropy: 0.17  
 
 ## lmo  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 30,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/lmo_polyglot_norm.png)  
@@ -1387,7 +1387,7 @@
 - Isotropy: 0.37  
 
 ## lv  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 94,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/lv_polyglot_norm.png)  
@@ -1406,7 +1406,7 @@
 - Isotropy: 0.29  
 
 ## mg  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 12,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/mg_polyglot_norm.png)  
@@ -1444,7 +1444,7 @@
 - Isotropy: 0.32  
 
 ## ml  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 94,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/ml_polyglot_norm.png)  
@@ -1463,7 +1463,7 @@
 - Isotropy: 0.23  
 
 ## mn  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 28,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/mn_polyglot_norm.png)  
@@ -1482,7 +1482,7 @@
 - Isotropy: 0.19  
 
 ## mr  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 47,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/mr_polyglot_norm.png)  
@@ -1501,7 +1501,7 @@
 - Isotropy: 0.2  
 
 ## ms  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 88,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/ms_polyglot_norm.png)  
@@ -1520,7 +1520,7 @@
 - Isotropy: 0.31  
 
 ## mt  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 16,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/mt_polyglot_norm.png)  
@@ -1539,7 +1539,7 @@
 - Isotropy: 0.18  
 
 ## my  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 54,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/my_polyglot_norm.png)  
@@ -1558,7 +1558,7 @@
 - Isotropy: 0.19  
 
 ## ne  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 42,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/ne_polyglot_norm.png)  
@@ -1634,7 +1634,7 @@
 - Isotropy: 0.43  
 
 ## oc  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 71,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/oc_polyglot_norm.png)  
@@ -1653,7 +1653,7 @@
 - Isotropy: 0.26  
 
 ## or  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 13,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/or_polyglot_norm.png)  
@@ -1672,7 +1672,7 @@
 - Isotropy: 0.14  
 
 ## os  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 7,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/os_polyglot_norm.png)  
@@ -1691,7 +1691,7 @@
 - Isotropy: 0.17  
 
 ## pa  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 14,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/pa_polyglot_norm.png)  
@@ -1710,7 +1710,7 @@
 - Isotropy: 0.16  
 
 ## pam  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 9,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/pam_polyglot_norm.png)  
@@ -1729,7 +1729,7 @@
 - Isotropy: 0.16  
 
 ## pl  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 238,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/pl_polyglot_norm.png)  
@@ -1748,7 +1748,7 @@
 - Isotropy: 0.45  
 
 ## pms  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 18,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/pms_polyglot_norm.png)  
@@ -1767,7 +1767,7 @@
 - Isotropy: 0.22  
 
 ## ps  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 20,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/ps_polyglot_norm.png)  
@@ -1805,7 +1805,7 @@
 - Isotropy: 0.38  
 
 ## qu  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 7,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/qu_polyglot_norm.png)  
@@ -1824,7 +1824,7 @@
 - Isotropy: 0.2  
 
 ## rm  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 9,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/rm_polyglot_norm.png)  
@@ -1881,7 +1881,7 @@
 - Isotropy: 0.5  
 
 ## sa  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 21,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/sa_polyglot_norm.png)  
@@ -1900,7 +1900,7 @@
 - Isotropy: 0.16  
 
 ## sah  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 11,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/sah_polyglot_norm.png)  
@@ -1919,7 +1919,7 @@
 - Isotropy: 0.17  
 
 ## scn  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 20,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/scn_polyglot_norm.png)  
@@ -1938,7 +1938,7 @@
 - Isotropy: 0.17  
 
 ## sco  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 22,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/sco_polyglot_norm.png)  
@@ -1957,7 +1957,7 @@
 - Isotropy: 0.22  
 
 ## se  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 3,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/se_polyglot_norm.png)  
@@ -1995,7 +1995,7 @@
 - Isotropy: 0.36  
 
 ## si  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 51,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/si_polyglot_norm.png)  
@@ -2052,7 +2052,7 @@
 - Isotropy: 0.6  
 
 ## sq  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 82,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/sq_polyglot_norm.png)  
@@ -2090,7 +2090,7 @@
 - Isotropy: 0.39  
 
 ## su  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 25,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/su_polyglot_norm.png)  
@@ -2128,7 +2128,7 @@
 - Isotropy: 0.41  
 
 ## sw  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 26,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/sw_polyglot_norm.png)  
@@ -2147,7 +2147,7 @@
 - Isotropy: 0.21  
 
 ## szl  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 4,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/szl_polyglot_norm.png)  
@@ -2204,7 +2204,7 @@
 - Isotropy: 0.26  
 
 ## tg  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 15,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/tg_polyglot_norm.png)  
@@ -2223,7 +2223,7 @@
 - Isotropy: 0.16  
 
 ## th  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 55,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/th_polyglot_norm.png)  
@@ -2242,7 +2242,7 @@
 - Isotropy: 0.23  
 
 ## tk  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 14,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/tk_polyglot_norm.png)  
@@ -2261,7 +2261,7 @@
 - Isotropy: 0.17  
 
 ## tl  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 41,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/tl_polyglot_norm.png)  
@@ -2299,7 +2299,7 @@
 - Isotropy: 0.41  
 
 ## tt  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 25,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/tt_polyglot_norm.png)  
@@ -2318,7 +2318,7 @@
 - Isotropy: 0.19  
 
 ## ug  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 13,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/ug_polyglot_norm.png)  
@@ -2337,7 +2337,7 @@
 - Isotropy: 0.16  
 
 ## uk  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 155,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/uk_polyglot_norm.png)  
@@ -2356,7 +2356,7 @@
 - Isotropy: 0.43  
 
 ## ur  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 29,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/ur_polyglot_norm.png)  
@@ -2375,7 +2375,7 @@
 - Isotropy: 0.26  
 
 ## uz  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 21,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/uz_polyglot_norm.png)  
@@ -2394,7 +2394,7 @@
 - Isotropy: 0.18  
 
 ## vec  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 18,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/vec_polyglot_norm.png)  
@@ -2432,7 +2432,7 @@
 - Isotropy: 0.35  
 
 ## vls  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 12,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/vls_polyglot_norm.png)  
@@ -2451,7 +2451,7 @@
 - Isotropy: 0.16  
 
 ## vo  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 21,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/vo_polyglot_norm.png)  
@@ -2470,7 +2470,7 @@
 - Isotropy: 0.24  
 
 ## wa  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 15,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/wa_polyglot_norm.png)  
@@ -2489,7 +2489,7 @@
 - Isotropy: 0.21  
 
 ## war  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 19,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/war_polyglot_norm.png)  
@@ -2508,7 +2508,7 @@
 - Isotropy: 0.19  
 
 ## yi  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 17,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/yi_polyglot_norm.png)  
@@ -2527,7 +2527,7 @@
 - Isotropy: 0.2  
 
 ## yo  
-- Vocabulary Size = 100,004  
+- Vocabulary Size = 9,004  
 - Embedding Length = 64  
 #### Embedding L2 Norms  
 ![](../images/yo_polyglot_norm.png)  

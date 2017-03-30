@@ -90,7 +90,6 @@ def norm_EDA(vectors, lg, embedding):
     result = (ad_test_stat, ad_crit_val_1, ad_result,
               ks_p_val, ks_result,
               sh_p_val, sh_result)
-
     return result
 
 
@@ -114,20 +113,23 @@ def pca_EDA(vectors, lg, embedding):
     plt.savefig('../images/' + lg + '_' + embedding + '_isotropy.png')
     plt.close('all')
 
+    vocabulary_size, vector_length = vectors.shape
     isotropy = (1 - sum(np.cumsum(pca.explained_variance_ratio_) * 1 / n)) / .5
-    return isotropy
+    return (vocabulary_size, vector_length, isotropy)
 
 
 def csv_EDA(lgs, embedding):
     """Send norm and pca EDA results to csv
     lgs = list of languages
     embedding = gensim, polyglot, etc."""
-    EDA_cols = ['AD_test_stat', 'AD_crit_val_1', 'AD_result',
-                'KS_p_val', 'KS_result', 'SH_p_val', 'SH_result']
+    norm_EDA_cols = ['AD_test_stat', 'AD_crit_val_1', 'AD_result',
+                     'KS_p_val', 'KS_result', 'SH_p_val', 'SH_result']
+    pca_EDA_cols = ['vocabulary_size', 'vector_length', 'isotropy']
     EDA_ind = lgs[0: len(pca_EDA_results)]
-    EDA_df = pd.DataFrame(norm_EDA_results, columns=EDA_cols, index=EDA_ind)\
-        .join(pd.DataFrame(pca_EDA_results, columns=['isotropy'],
-                           index=EDA_ind))
+    EDA_df = pd.DataFrame(norm_EDA_results, columns=norm_EDA_cols,
+                          index=EDA_ind).\
+        join(pd.DataFrame(pca_EDA_results, columns=pca_EDA_cols,
+                          index=EDA_ind))
     EDA_df.index.name = 'lg'
     EDA_df.to_csv('../data/' + embedding + '_eda.csv')
     return
@@ -142,9 +144,9 @@ def report_EDA(lgs, languages, embedding):
     for i in range(len(norm_EDA_results)):
         lg = lgs[i]
         md += '## ' + languages[i] + '  \n'
-        md += '- Vocabulary Size = ' + '{:,.0f}'.format(vocabulary_size) +\
-            '  \n'
-        md += '- Embedding Length = ' + str(vector_length) + '  \n'
+        md += '- Vocabulary Size = ' + '{:,.0f}'.format(
+            pca_EDA_results[i][0]) + '  \n'
+        md += '- Embedding Length = ' + str(pca_EDA_results[i][1]) + '  \n'
 
         md += '#### Embedding L2 Norms  \n'
         md += '![](../images/' + lg + '_' + embedding + '_norm.png)  \n'
@@ -165,7 +167,7 @@ def report_EDA(lgs, languages, embedding):
 
         md += '#### Embedding Isotropy  \n'
         md += '![](../images/' + lg + '_' + embedding + '_isotropy.png)  \n'
-        md += '- Isotropy: ' + str(pca_EDA_results[i].round(2)) + '  \n\n'
+        md += '- Isotropy: ' + str(pca_EDA_results[i][2].round(2)) + '  \n\n'
 
     with open('../reports/' + embedding + '_EDA.md', mode='w') as f:
         f.write(md)
@@ -187,7 +189,6 @@ if __name__ == "__main__":
         for lg in lgs:
             # Load vocab and vectors for lg/embedding
             vocab, vectors = vocab_vectors_load(lg, embedding)
-            vocabulary_size, vector_length = vectors.shape
 
             # EDA on the norm of the embedding vectors
             norm_EDA_results.append(norm_EDA(vectors, lg, embedding))
