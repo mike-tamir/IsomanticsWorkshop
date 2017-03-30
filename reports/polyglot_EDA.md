@@ -1,8 +1,8 @@
-# Gensim EDA  
-## Bengali  
+# Polyglot EDA  
+## af  
 #### Embedding L2 Norms  
-![](../images/bn_gensim_norm.png)  
-- Anderson-Darling Test Statistic: 290.12  
+![](../images/af_polyglot_norm.png)  
+- Anderson-Darling Test Statistic: 1887.16  
 - Anderson-Darling Critical Value (1%): 1.09  
 - Anderson-Darling Test Result: Reject  
 
@@ -13,6 +13,6 @@
 - Shapiro-Wilk Test Result: Reject  
 
 #### Embedding Isotropy  
-![](../images/bn_gensim_isotropy.png)  
-- Isotropy: 0.18  
+![](../images/af_polyglot_isotropy.png)  
+- Isotropy: 0.26  
 

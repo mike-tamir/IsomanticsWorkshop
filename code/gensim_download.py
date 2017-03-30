@@ -9,52 +9,45 @@ def googauth():
     """Google authentication"""
     gauth = GoogleAuth()
     gauth.LoadCredentialsFile("../gauth.yml")
-    # if gauth.credentials is None:
-    #     gauth.LocalWebserverAuth()
-    # elif gauth.access_token_expired:
-    #     gauth.Refresh()
-    # else:
-    #     gauth.Authorize()
-
-    # gauth.SaveCredentialsFile("../gauth.yml")
     gauth.Authorize()
     return gauth
 
 
-def retrieve_files(drive, ids, path, filenames):
+def gensim_retrieve(drive, ids, filenames):
     """Retrieve files from google drive
     drive = GoogleDrive() Object
     ids = list of google drive ids to download
-    path = local path destination
     filenames = list of filenames for local save"""
 
-    for i, file in enumerate(ids):
-        f = drive.CreateFile({'id': file})
-        f.GetContentFile(path + filenames[i])
+    for i, g_id in enumerate(ids):
+        f = drive.CreateFile({'id': g_id})
+        f.GetContentFile('../data/gensim/' + filenames[i] + '.zip')
 
 
-def unzip_files(path, filenames):
+def gensim_unzip(filenames):
+    """Unzip retrieved gensim files"""
     for file in filenames:
-        zipfile.ZipFile(path + file + '.zip').extractall(path + file)
-        os.remove(path + file + '.zip')
+        zipfile.ZipFile('../data/gensim/' + file + '.zip').\
+            extractall('../data/gensim/' + file)
+        os.remove('../data/gensim/' + file + '.zip')
 
 
-def pickle_rw(loc, *tuples, write=True):
-    """Pickle object in each tuple to/from location folder
-    loc = folder location for objects
+def pickle_rw(*tuples, write=True):
+    """Pickle object in each tuple to/from ../pickle folder
     tuples = the filenames and objects to pickle ('name', name)"""
-    loc = loc if loc[-1] == '/' else loc + '/'
     result = []
     for tup in tuples:
         fname, obj = tup
         if write:
-            with open(loc + fname + '.pkl', 'wb') as f:
+            with open('../pickle/' + fname + '.pkl', 'wb') as f:
                 pickle.dump(obj, f)
         else:
-            with open(loc + fname + '.pkl', 'rb') as f:
-                result.append(pickle.load(f))
+            with open('../pickle/' + fname + '.pkl', 'rb') as f:
+                result.append(pickle.load(f, encoding='bytes'))
     if result == []:
         return
+    elif len(result) == 1:
+        return result[0]
     else:
         return result
 
@@ -157,12 +150,11 @@ if __name__ == "__main__":
     drive = GoogleDrive(gauth)
 
     # Download all file ids from google
-    retrieve_files(drive, gensim_fileids, 'data/gensim/',
-                   [lg + '.zip' for lg in gensim_lgs])
+    gensim_retrieve(drive, gensim_fileids[:1], gensim_lgs[:1])
 
     # Unzip all files
-    unzip_files('data/gensim/', gensim_lgs)
+    gensim_unzip(gensim_lgs[:1])
 
     # Pickle objects for later
-    pickle_rw('pickle/', ('gensim_languages', gensim_languages),
+    pickle_rw(('gensim_languages', gensim_languages),
               ('gensim_lgs', gensim_lgs))

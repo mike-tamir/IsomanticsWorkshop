@@ -1,30 +1,62 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import pickle
 from scipy.stats import anderson, kstest, norm, shapiro
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from gensim_download import pickle_rw
 
 
-def load_embedding(filepath):
+def lg_load(embedding):
+    """Load languages and lgs lists for embedding"""
+    if embedding == 'gensim':
+        languages, lgs = pickle_rw(('gensim_languages', 0),
+                                   ('gensim_lgs', 0), write=False)
+    elif embedding == 'polyglot':
+        # polyglot doesn't have languages, so use lgs for both
+        languages, lgs = pickle_rw(('polyglot_lgs', 0),
+                                   ('polyglot_lgs', 0), write=False)
+    else:
+        pass
+    return languages, lgs
+
+
+def gensim_load(lg):
     """Load embedding from file"""
-    with open(filepath) as f:
+    with open('../data/gensim/' + lg + '/' + lg + '.tsv') as f:
         f_string = f.read()
     f_list = f_string.split(']')[:-1]
     vocab = [_.split('[')[0].split('\t')[1] for _ in f_list]
     vectors_text = [_.split('[')[1].replace('\n', '').split(' ')
                     for _ in f_list]
     vectors_text = [[a for a in b if a != ''] for b in vectors_text]
-    vectors = np.asarray(vectors_text, dtype=np.float64)
+    vectors = np.asarray(vectors_text, dtype=np.float32)
     return vocab, vectors
 
 
-def norm_EDA(vectors, path, lg):
+def polyglot_load(lg):
+    with open('../data/polyglot/' + lg + '.pkl', 'rb') as f:
+        vocab, vectors = pickle.load(f, encoding='bytes')
+    return vocab, vectors
+
+
+def vocab_vectors_load(lg, embedding):
+    """Load vocab and vectors for lg/embedding"""
+    if embedding == 'gensim':
+        vocab, vectors = gensim_load(lg)
+    elif embedding == 'polyglot':
+        vocab, vectors = polyglot_load(lg)
+    else:
+        pass
+    return vocab, vectors
+
+
+def norm_EDA(vectors, lg, embedding):
     """EDA on the norm of the vectors
     vectors = word embedding vectors
-    path = location of images folder
-    lg = language"""
+    lg = language
+    embedding = gensim, polyglot, etc."""
     # L2 norm of vectors, then normalize distribution of L2 norms
     vectors_norm = np.linalg.norm(vectors, axis=1)
     vectors_norm_normalized = (vectors_norm - vectors_norm.mean()) \
@@ -35,7 +67,7 @@ def norm_EDA(vectors, path, lg):
     plt.hist(vectors_norm_normalized, bins=100, normed=True)
     x = np.linspace(-3, 3, 100)
     plt.plot(x, norm.pdf(x, 0, 1), color='r', linewidth=3)
-    plt.savefig(path + lg + '_gensim_norm.png')
+    plt.savefig('../images/' + lg + '_' + embedding + '_norm.png')
     plt.close('all')
 
     # Anderson Darling
@@ -61,11 +93,11 @@ def norm_EDA(vectors, path, lg):
     return result
 
 
-def pca_EDA(vectors, path, lg):
+def pca_EDA(vectors, lg, embedding):
     """PCA on vectors
     vectors = word embedding vectors
-    path = location of images folder
-    lg = language"""
+    lg = language
+    embedding = gensim, polyglot, etc."""
     vectors_ss = StandardScaler().fit_transform(vectors)
     pca = PCA().fit(vectors_ss)
 
@@ -76,35 +108,40 @@ def pca_EDA(vectors, path, lg):
     plt.xlabel('Number of Eigenvectors')
     plt.ylabel('Explained Variance')
     plt.ylim((0, 1))
-    plt.savefig(path + lg + '_gensim_isotropy.png')
+    plt.savefig('../images/' + lg + '_' + embedding + '_isotropy.png')
     plt.close('all')
 
     isotropy = (1 - sum(np.cumsum(pca.explained_variance_ratio_) * 1 / n)) / .5
     return isotropy
 
 
-def csv_EDA(path):
-    """Send norm and pca EDA results to csv"""
+def csv_EDA(lgs, embedding):
+    """Send norm and pca EDA results to csv
+    lgs = list of languages
+    embedding = gensim, polyglot, etc."""
     EDA_cols = ['AD_test_stat', 'AD_crit_val_1', 'AD_result',
                 'KS_p_val', 'KS_result', 'SH_p_val', 'SH_result']
-    EDA_ind = gensim_lgs[0: len(pca_EDA_results)]
+    EDA_ind = lgs[0: len(pca_EDA_results)]
     EDA_df = pd.DataFrame(norm_EDA_results, columns=EDA_cols, index=EDA_ind)\
         .join(pd.DataFrame(pca_EDA_results, columns=['isotropy'],
                            index=EDA_ind))
     EDA_df.index.name = 'lg'
-    EDA_df.to_csv(path + 'gensim_eda.csv')
+    EDA_df.to_csv('../data/' + embedding + '_eda.csv')
     return
 
 
-def report_EDA(path):
-    """Create and save markdown report of EDA results"""
-    md = '# Gensim EDA  \n'
+def report_EDA(lgs, languages, embedding):
+    """Create and save markdown report of EDA results
+    lgs = list of language abbreviations
+    languages = list of languages
+    embedding = gensim, polyglot, etc."""
+    md = '# ' + embedding.title() + ' EDA  \n'
     for i in range(len(norm_EDA_results)):
-        lg = gensim_lgs[i]
-        md += '## ' + gensim_languages[i] + '  \n'
+        lg = lgs[i]
+        md += '## ' + languages[i] + '  \n'
 
         md += '#### Embedding L2 Norms  \n'
-        md += '![](../images/' + lg + '_gensim_norm.png)  \n'
+        md += '![](../images/' + lg + '_' + embedding + '_norm.png)  \n'
         md += '- Anderson-Darling Test Statistic: ' +\
             str(norm_EDA_results[i][0].round(2)) + '  \n'
         md += '- Anderson-Darling Critical Value (1%): ' +\
@@ -121,42 +158,42 @@ def report_EDA(path):
             norm_EDA_results[i][6] + '  \n\n'
 
         md += '#### Embedding Isotropy  \n'
-        md += '![](../images/' + lg + '_gensim_isotropy.png)  \n'
+        md += '![](../images/' + lg + '_' + embedding + '_isotropy.png)  \n'
         md += '- Isotropy: ' + str(pca_EDA_results[i].round(2)) + '  \n\n'
 
-    with open(path + 'gensim_EDA.md', mode='w') as f:
+    with open('../reports/' + embedding + '_EDA.md', mode='w') as f:
         f.write(md)
     return
 
 
 if __name__ == "__main__":
-    # Load lists from pickle
-    gensim_languages, gensim_lgs = pickle_rw('../pickle/',
-                                             ('gensim_languages', 0),
-                                             ('gensim_lgs', 0), write=False)
+    # For each embedding
+    embeddings = ['gensim', 'polyglot']
+    for embedding in embeddings:
+        # Load languages and lgs lists for embedding
+        languages, lgs = lg_load(embedding)
 
-    # Results lists
-    norm_EDA_results = []
-    pca_EDA_results = []
+        # Results lists
+        norm_EDA_results = []
+        pca_EDA_results = []
 
-    # For each language
-    for lg in gensim_lgs:
-        # Load embedding from tsv file
-        vocab, vectors = load_embedding('../data/gensim/' + lg + '/' +
-                                        lg + '.tsv')
+        # For each language
+        for lg in lgs[:1]:
+            # Load vocab and vectors for lg/embedding
+            vocab, vectors = vocab_vectors_load(lg, embedding)
 
-        # EDA on the norm of the embedding vectors
-        norm_EDA_results.append(norm_EDA(vectors, '../images/', lg))
+            # EDA on the norm of the embedding vectors
+            norm_EDA_results.append(norm_EDA(vectors, lg, embedding))
 
-        # PCA and isotropy of the embedding vectors
-        pca_EDA_results.append(pca_EDA(vectors, '../images/', lg))
+            # PCA and isotropy of the embedding vectors
+            pca_EDA_results.append(pca_EDA(vectors, lg, embedding))
 
-        # Pickle the vocab and vector objects
-        pickle_rw('../pickle/', (lg + '_gensim_vocab', vocab),
-                  (lg + '_gensim_vectors', vectors))
+            # Pickle the vocab and vector objects
+            pickle_rw((lg + '_' + embedding + '_vocab', vocab),
+                      (lg + '_' + embedding + '_vectors', vectors))
 
-    # Save norm and pca EDA results
-    csv_EDA('../data/')
+        # Save norm and pca EDA results
+        csv_EDA(lgs, embedding)
 
-    # Create markdown report
-    report_EDA('../reports/')
+        # Create markdown report
+        report_EDA(lgs, languages, embedding)
