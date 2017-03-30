@@ -184,7 +184,7 @@ if __name__ == "__main__":
         pca_EDA_results = []
 
         # For each language
-        for lg in lgs[:1]:
+        for lg in lgs:
             # Load vocab and vectors for lg/embedding
             vocab, vectors = vocab_vectors_load(lg, embedding)
             vocabulary_size, vector_length = vectors.shape

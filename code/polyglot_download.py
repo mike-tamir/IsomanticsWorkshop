@@ -55,4 +55,4 @@ if __name__ == "__main__":
     drive = GoogleDrive(gauth)
 
     # Retrive the files
-    polyglot_retrieve(polyglot_links[:1])
+    polyglot_retrieve(polyglot_links)
