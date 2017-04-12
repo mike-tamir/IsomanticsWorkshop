@@ -24,4 +24,7 @@ pickle/
 # Scratch Notebooks
 Isomantics.ipynb
 spark.ipynb
+Workflow.ipynb
 
+# Scratch Python
+google_translate_api.py

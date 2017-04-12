@@ -6,50 +6,7 @@ from scipy.stats import anderson, kstest, norm, shapiro
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from gensim_download import pickle_rw
-
-
-def lg_load(embedding):
-    """Load languages and lgs lists for embedding"""
-    if embedding == 'gensim':
-        languages, lgs = pickle_rw(('gensim_languages', 0),
-                                   ('gensim_lgs', 0), write=False)
-    elif embedding == 'polyglot':
-        # polyglot doesn't have languages, so use lgs for both
-        languages, lgs = pickle_rw(('polyglot_lgs', 0),
-                                   ('polyglot_lgs', 0), write=False)
-    else:
-        pass
-    return languages, lgs
-
-
-def gensim_load(lg):
-    """Load embedding from file"""
-    with open('../data/gensim/' + lg + '/' + lg + '.tsv') as f:
-        f_string = f.read()
-    f_list = f_string.split(']')[:-1]
-    vocab = [_.split('[')[0].split('\t')[1] for _ in f_list]
-    vectors_text = [_.split('[')[1].replace('\n', '').split(' ')
-                    for _ in f_list]
-    vectors_text = [[a for a in b if a != ''] for b in vectors_text]
-    vectors = np.asarray(vectors_text, dtype=np.float32)
-    return vocab, vectors
-
-
-def polyglot_load(lg):
-    with open('../data/polyglot/' + lg + '.pkl', 'rb') as f:
-        vocab, vectors = pickle.load(f, encoding='bytes')
-    return vocab, vectors
-
-
-def vocab_vectors_load(lg, embedding):
-    """Load vocab and vectors for lg/embedding"""
-    if embedding == 'gensim':
-        vocab, vectors = gensim_load(lg)
-    elif embedding == 'polyglot':
-        vocab, vectors = polyglot_load(lg)
-    else:
-        pass
-    return vocab, vectors
+from vocab_vectors import embedding_languages_lgs
 
 
 def norm_EDA(vectors, lg, embedding):
@@ -175,11 +132,13 @@ def report_EDA(lgs, languages, embedding):
 
 
 if __name__ == "__main__":
+    # List embeddings
+    embeddings = ['fasttext']
+
     # For each embedding
-    embeddings = ['gensim', 'polyglot']
     for embedding in embeddings:
         # Load languages and lgs lists for embedding
-        languages, lgs = lg_load(embedding)
+        languages, lgs = embedding_languages_lgs(embedding)
 
         # Results lists
         norm_EDA_results = []
@@ -188,17 +147,15 @@ if __name__ == "__main__":
         # For each language
         for lg in lgs:
             # Load vocab and vectors for lg/embedding
-            vocab, vectors = vocab_vectors_load(lg, embedding)
+            vocab, vectors = pickle_rw((lg + '_' + embedding + '_vocab', 0),
+                                       (lg + '_' + embedding + '_vectors', 0),
+                                       write=False)
 
             # EDA on the norm of the embedding vectors
             norm_EDA_results.append(norm_EDA(vectors, lg, embedding))
 
             # PCA and isotropy of the embedding vectors
             pca_EDA_results.append(pca_EDA(vectors, lg, embedding))
-
-            # Pickle the vocab and vector objects
-            pickle_rw((lg + '_' + embedding + '_vocab', vocab),
-                      (lg + '_' + embedding + '_vectors', vectors))
 
         # Save norm and pca EDA results
         csv_EDA(lgs, embedding)
