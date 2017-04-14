@@ -133,7 +133,7 @@ def report_EDA(lgs, languages, embedding):
 
 if __name__ == "__main__":
     # List embeddings
-    embeddings = ['fasttext']
+    embeddings = ['gensim', 'polyglot', 'fasttext']
 
     # For each embedding
     for embedding in embeddings:
