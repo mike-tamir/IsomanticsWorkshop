@@ -15,6 +15,9 @@ def embedding_languages_lgs(embedding):
     elif embedding == 'fasttext':
         languages, lgs = pickle_rw(('fasttext_languages', 0),
                                    ('fasttext_lgs', 0), write=False)
+    elif embedding == 'zeroshot':
+        languages, lgs = pickle_rw(('zeroshot_languages', 0),
+                                   ('zeroshot_lgs', 0), write=False)
     else:
         pass
     return languages, lgs
@@ -61,6 +64,18 @@ def fasttext_vocab_vectors(lg):
     return vocab, vectors
 
 
+def zeroshot_vocab_vectors(lg):
+    """Load embedding from file"""
+    with open('../data/zeroshot/transmat/data/' + lg +
+              '.200K.cbow1_wind5_hs0_neg10_size300_smpl1e-05.txt') as f:
+        f_string = f.read()
+    f_list = f_string.split('\n')[1:-1]
+    vocab = [_.split(' ')[0] for _ in f_list]
+    vectors_text = [_.split(' ')[1:] for _ in f_list]
+    vectors = np.asarray(vectors_text, dtype=np.float32)
+    return vocab, vectors
+
+
 def pick_vocab_vectors(embedding, lg):
     """Load vocab and vectors for lg/embedding"""
     if embedding == 'gensim':
@@ -69,6 +84,8 @@ def pick_vocab_vectors(embedding, lg):
         vocab, vectors = polyglot_vocab_vectors(lg)
     elif embedding == 'fasttext':
         vocab, vectors = fasttext_vocab_vectors(lg)
+    elif embedding == 'zeroshot':
+        vocab, vectors = zeroshot_vocab_vectors(lg)
     else:
         pass
     return vocab, vectors
@@ -76,7 +93,7 @@ def pick_vocab_vectors(embedding, lg):
 
 if __name__ == "__main__":
     # List embeddings
-    embeddings = ['gensim', 'polyglot', 'fasttext']
+    embeddings = ['gensim', 'polyglot', 'fasttext', 'zeroshot']
 
     # For each embedding
     for embedding in embeddings:

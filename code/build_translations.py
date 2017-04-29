@@ -8,7 +8,7 @@ from vocab_vectors import embedding_languages_lgs
 
 def translate_text(source_text, lg_from, lg_to):
     """
-    # Fakhri Abbas found and modified code from
+    # Fakhri Abbas found and modified this function from
     # http://codegist.net/snippet/python/google-translatepy_lotabout_python
     Keyword arguments:
     lg_from -- The language code for the source text argument
@@ -56,10 +56,13 @@ def translate_vocab(vocab, lg_from, lg_to):
             d[v] = t
 
         counter += 1
-        if counter % 1000 == 0:
+        if counter % 100 == 0:
             print(counter)
+        if counter % 10000 == 0:
             # Pickle dictionary
             pickle_rw((lg_from + '_' + lg_to, d))
+    pickle_rw((lg_from + '_' + lg_to, d))
+    print("Complete")
     return
 
 
@@ -72,7 +75,7 @@ if __name__ == '__main__':
 
     # List of all (lg_from, lg_to) combinations
     translations = [(a, b) for a in lgs for b in lgs if a != b]
-    translations = [('en', 'ru')]  # Temporary override
+    translations = [('de', 'en')]  # Temporary override
 
     # For each combination of lgs
     for translation in translations:
