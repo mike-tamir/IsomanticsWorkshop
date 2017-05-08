@@ -1,10 +1,12 @@
 # Repository Overview
+
 ## Landing Page
 Please find the following 2 important documents directly on the repository landing page:
 - Practical observations in applying neural word embeddings to machine translation
   - This paper describes this project in detail
 - Presentation
   - These slides were used in a presentation of this project
+
 ## Code Folder
 This folder contains the following Python scripts:
 - gauth.py
@@ -42,8 +44,10 @@ This folder contains the following Python scripts:
   - Trains the translation matrix T
   - Calculates the test performance of the translation
   - Creates the results report and saves locally to the reports subfolder
+
 ## Images Folder
 This folder stores all the images used in the reports
+
 ## Reports Folder
 This folder contains the following reports:
  - Exploratory data analysis output for each of the 4 embedding sources
