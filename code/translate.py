@@ -14,7 +14,7 @@ def make_dict(vocab, vectors):
     return {vocab[i]: vectors[i] for i in range(len(vocab))}
 
 
-def vocab_train_test(embedding):
+def vocab_train_test(embedding, lg1, lg2, lg1_vocab):
     """Create training and test vocabularies"""
     if embedding == 'zeroshot':
         with open('../data/zeroshot/transmat/data/' +
@@ -237,7 +237,8 @@ if __name__ == '__main__':
         lg2_dict = make_dict(lg2_vocab, lg2_vectors)
 
         # Train/Test Vocab/Vectors
-        vocab_train, vocab_test = vocab_train_test(embedding)
+        vocab_train, vocab_test = vocab_train_test(embedding, lg1, lg2,
+                                                   lg1_vocab)
         X_train, X_test, y_train, y_test = vectors_train_test(vocab_train,
                                                               vocab_test)
 

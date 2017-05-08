@@ -28,3 +28,7 @@ Workflow.ipynb
 
 # Scratch Python
 google_translate_api.py
+
+# Pages and Presentations
+*.pages
+*.key
