@@ -80,7 +80,7 @@ if __name__ == '__main__':
 
     # List of all (lg_from, lg_to) combinations
     translations = [(a, b) for a in lgs for b in lgs if a != b]
-    translations = [('es','zh-CN')]  # Temporary override
+    translations = [('de','en')]  # Temporary override
 
     # For each combination of lgs
     for translation in translations:

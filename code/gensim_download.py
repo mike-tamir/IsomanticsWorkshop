@@ -32,7 +32,7 @@ def gensim_unzip(filenames):
         os.remove('../data/gensim/' + file + '.zip')
 
 
-def pickle_rw(*tuples, write=True):
+def pickle_rw(*tuples,write=True):
     """Pickle object in each tuple to/from ../pickle folder
     tuples = the filenames and objects to pickle ('name', name)"""
     result = []
@@ -150,10 +150,10 @@ if __name__ == "__main__":
     drive = GoogleDrive(gauth)
 
     # Download all file ids from google
-    gensim_retrieve(drive, gensim_fileids[:1], gensim_lgs[:1])
+    gensim_retrieve(drive, gensim_fileids[:], gensim_lgs[:])
 
     # Unzip all files
-    gensim_unzip(gensim_lgs[:1])
+    gensim_unzip(gensim_lgs[:])
 
     # Pickle objects for later
     pickle_rw(('gensim_languages', gensim_languages),

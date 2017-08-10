@@ -7,17 +7,17 @@ def embedding_languages_lgs(embedding):
     """Load languages and lgs lists for embedding"""
     if embedding == 'gensim':
         languages, lgs = pickle_rw(('gensim_languages', 0),
-                                   ('gensim_lgs', 0), write=False)
+                                   ('gensim_lgs', 0),write=False)
     elif embedding == 'polyglot':
         # polyglot doesn't have languages, so use lgs for both
         languages, lgs = pickle_rw(('polyglot_lgs', 0),
-                                   ('polyglot_lgs', 0), write=False)
+                                   ('polyglot_lgs', 0),write=False)
     elif embedding == 'fasttext':
         languages, lgs = pickle_rw(('fasttext_languages', 0),
-                                   ('fasttext_lgs', 0), write=False)
+                                   ('fasttext_lgs', 0),write=False)
     elif embedding == 'zeroshot':
         languages, lgs = pickle_rw(('zeroshot_languages', 0),
-                                   ('zeroshot_lgs', 0), write=False)
+                                   ('zeroshot_lgs', 0),write=False)
     else:
         pass
     return languages, lgs
@@ -93,7 +93,8 @@ def pick_vocab_vectors(embedding, lg):
 
 if __name__ == "__main__":
     # List embeddings
-    embeddings = ['gensim', 'polyglot', 'fasttext', 'zeroshot']
+    #embeddings = ['gensim', 'polyglot', 'fasttext', 'zeroshot']
+    embeddings = ['fasttext']
 
     # For each embedding
     for embedding in embeddings:

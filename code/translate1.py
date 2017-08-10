@@ -7,12 +7,19 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
+
+import numpy.linalg
+
 from numpy.linalg import det
+
+import sympy as sympy
+
+from sympy import Matrix
 
 def make_dict(vocab, vectors):
     """Make dictionary of vocab and vectors"""
     return {vocab[i]: vectors[i] for i in range(len(vocab))}
-=
+
 
 def vocab_train_test(embedding, lg1, lg2, lg1_vocab):
     """Create training and test vocabularies"""
@@ -51,19 +58,9 @@ def vocab_train_test(embedding, lg1, lg2, lg1_vocab):
                 if lg1_word_R:
                     if lg1_word.lower() == lg1_word_R.lower():
                         vocab_2D.append((lg1_word, lg1_word_T))
-        print(len(vocab_2D))
+        print('length of '+ lg1+'-'+ lg2+ ' vocab: '+str(len(vocab_2D)))
 
-        # Create Train/Test vocab
-        # if split == 'random':
-        #     sample = np.random.choice(len(vocab_2D), 6500, replace=False)
-        #     vocab_train = np.asarray(vocab_2D)[sample[:5000]].tolist()
-        #     vocab_test = np.asarray(vocab_2D)[sample[5000:]].tolist()
-        # elif split == 'top':
-        #     sample = np.random.choice(range(6500), 6500, replace=False)
-        #     vocab_train = np.asarray(vocab_2D)[:5000, :].tolist()
-        #     vocab_test = np.asarray(vocab_2D)[:1500, :].tolist()
-        # else:
-        #     pass
+        #Create Train/Test vocab
 
         if split == 'random':
             sample = np.random.choice(len(vocab_2D), 6500, replace=False)
@@ -75,6 +72,17 @@ def vocab_train_test(embedding, lg1, lg2, lg1_vocab):
             vocab_test = np.asarray(vocab_2D)[:1500, :].tolist()
         else:
             pass
+
+        # if split == 'random':
+        #     sample = np.random.choice(len(vocab_2D), 900, replace=False)
+        #     vocab_train = np.asarray(vocab_2D)[sample[:700]].tolist()
+        #     vocab_test = np.asarray(vocab_2D)[sample[700:]].tolist()
+        # elif split == 'top':
+        #     sample = np.random.choice(range(900), 900, replace=False)
+        #     vocab_train = np.asarray(vocab_2D)[:700, :].tolist()
+        #     vocab_test = np.asarray(vocab_2D)[:200, :].tolist()
+        # else:
+        #     pass
 
     return vocab_train, vocab_test
 
@@ -96,8 +104,50 @@ def translation_matrix(X_train, y_train):
     history = model.fit(X_train, y_train, batch_size=128, epochs=20,
                         verbose=False)
     T = model.get_weights()[0]
-    D = np.linalg.det(T)
-    return model, history, T, D
+
+
+    M = np.matrix(T)
+
+    T_norm, T_normed = normalize(M)
+
+    D = round(np.linalg.det(T_normed),3)
+    #print(T_normed)
+    #print(T_normed.getH())
+
+    #print(np.around(np.matmul(T_normed,T_normed.getH())))
+
+    #print(np.around(np.matmul(T_normed.getH(),T_normed)))
+
+    print (np.linalg.det(np.subtract(np.matmul(M,M.getH()),np.matmul(M.getH(),M))))
+
+    if np.array_equal(np.around(np.matmul(T_normed,T_normed.getH())), np.around(np.matmul(T_normed.getH(),T_normed))) == True:
+        tf = "True"
+    else:
+        tf = "False"
+
+    return model, history, T, D, tf
+
+def translation_accuracy(X_test, y_test):
+    """Get predicted matrix 'yhat' using 'T' and find translation accuracy"""
+    # yhat
+    yhat = X.dot(T)
+    count = 0
+    for i in range(len(y_test)):
+        if yhat[i,:].all() == y_test[i,:].all():
+            count = count + 1
+    accuracy = count/len(y_test)*100
+    return accuracy
+
+def svd(T):
+    """Perform SVD on the translation matrix 'T' """
+    U, s, Vh = numpy.linalg.svd(T, full_matrices=False )
+    return U, s, Vh
+
+def T_svd_EDA(s):
+    """Perform SVD on the translation matrix 'T' """
+    plt.plot(s)
+
+
 
 
 def normalize(matrix):
@@ -158,19 +208,20 @@ def T_norm_EDA(results_df):
     test_size = results_df.shape[0]
     test_accuracy = round(results_df.neighbor_correct.mean(), 2)
 
+    print('Test Accuracy: '+str(test_accuracy)+'\n')
+
     plot_data = ['X_norm', 'y_norm', 'yhat_norm', 'yhat_neighbor_norm']
-    f, ax = plt.subplots(len(plot_data), sharex=True, sharey=True,
-                         figsize=(10, 10))
-    for i, d in enumerate(plot_data):
-        ax[i].hist(results_df[d], bins=100)
-        ax[i].axis('off')
-        title = '{}: mean={}, std={}'.format(d, round(results_df[d].mean(), 2),
-                                             round(results_df[d].std(), 2))
-        ax[i].set_title(title)
-    f.subplots_adjust(hspace=0.7)
-    plt.savefig('../images/' + lg1 + '_' + lg2 + '_' + embedding +
-                '_T_norm.png')
-    plt.close('all')
+    # f, ax = plt.subplots(len(plot_data), sharex=True, sharey=True,
+    #                      figsize=(10, 10))
+    # for i, d in enumerate(plot_data):
+    #     ax[i].hist(results_df[d], bins=100)
+    #     ax[i].axis('off')
+    #     title = '{}: mean={}, std={}'.format(d, round(results_df[d].mean(), 2), round(results_df[d].std(), 2))
+    #     ax[i].set_title(title)
+    # f.subplots_adjust(hspace=0.7)
+    # plt.savefig('../images/' + lg1 + '_' + lg2 + '_' + embedding +
+    #             '_T_norm.png')
+    # plt.close('all')
     return
 
 
@@ -180,17 +231,17 @@ def T_pca_EDA(T):
     pca = PCA().fit(T_ss)
     n = pca.n_components_
 
-    plt.figure(figsize=(10, 6))
-    plt.xlim((0, n))
-    plt.ylim((0, 1))
-    plt.plot(range(n + 1), [0] + np.cumsum(pca.explained_variance_ratio_).
-             tolist())
-    plt.plot(range(n + 1), np.asarray(range(n + 1)) / n)
-    plt.xlabel('Number of Eigenvectors')
-    plt.ylabel('Explained Variance')
-    plt.savefig('../images/' + lg1 + '_' + lg2 + '_' + embedding +
-                '_T_isotropy.png')
-    plt.close('all')
+    # plt.figure(figsize=(10, 6))
+    # plt.xlim((0, n))
+    # plt.ylim((0, 1))
+    # plt.plot(range(n + 1), [0] + np.cumsum(pca.explained_variance_ratio_).
+    #          tolist())
+    # plt.plot(range(n + 1), np.asarray(range(n + 1)) / n)
+    # plt.xlabel('Number of Eigenvectors')
+    # plt.ylabel('Explained Variance')
+    # plt.savefig('../images/' + lg1 + '_' + lg2 + '_' + embedding +
+    #             '_T_isotropy.png')
+    # plt.close('all')
 
     isotropy = (1 - sum(np.cumsum(pca.explained_variance_ratio_) * 1 / n)) / .5
     return isotropy
@@ -237,47 +288,47 @@ def T_report_results(embedding, lg1, lg2, lg1_vectors, lg2_vectors,
 
 if __name__ == '__main__':
     # Manually set list of translations (embedding, lg1, lg2)
-    translations = [('fasttext_random', 'en', 'ru'),
+    translations = [#('fasttext_random', 'en', 'ru'),
                     ('fasttext_top', 'en', 'ru'),
-                    ('fasttext_random', 'en', 'de'),
+                    #('fasttext_random', 'en', 'de'),
                     ('fasttext_top', 'en', 'de'),
-                    ('fasttext_random', 'en', 'es'),
+                    #('fasttext_random', 'en', 'es'),
                     ('fasttext_top', 'en', 'es'),
-                    ('fasttext_random', 'en', 'zh-CN'),
-                    ('fasttext_top', 'en', 'zh-CN'),
-                    ('fasttext_random', 'de', 'en'),
+                    #('fasttext_random', 'en', 'zh-CN'),
+                    #('fasttext_top', 'en', 'zh-CN'),
+                    #('fasttext_random', 'de', 'en'),
                     ('fasttext_top', 'de', 'en'),
-                    ('fasttext_random', 'de', 'es'),
+                    #('fasttext_random', 'de', 'es'),
                     ('fasttext_top', 'de', 'es'),
-                    ('fasttext_random', 'de', 'ru'),
+                    #('fasttext_random', 'de', 'ru'),
                     ('fasttext_top', 'de', 'ru'),
-                    ('fasttext_random', 'de', 'zh-CN'),
-                    ('fasttext_top', 'de', 'zh-CN'),
-                    ('fasttext_random', 'ru', 'en'),
+                    #('fasttext_random', 'de', 'zh-CN'),
+                    #('fasttext_top', 'de', 'zh-CN'),
+                    #('fasttext_random', 'ru', 'en'),
                     ('fasttext_top', 'ru', 'en'),
-                    ('fasttext_random', 'ru', 'es'),
+                    #('fasttext_random', 'ru', 'es'),
                     ('fasttext_top', 'ru', 'es'),
-                    ('fasttext_random', 'ru', 'zh-CN'),
-                    ('fasttext_top', 'ru', 'zh-CN'),
-                    ('fasttext_random', 'ru', 'de'),
+                    #('fasttext_random', 'ru', 'zh-CN'),
+                    #('fasttext_top', 'ru', 'zh-CN'),
+                    #('fasttext_random', 'ru', 'de'),
                     ('fasttext_top', 'ru', 'de'),
-                    ('fasttext_random', 'zh-CN', 'en'),
+                    #('fasttext_random', 'zh-CN', 'en'),
                     ('fasttext_top', 'zh-CN', 'en'),
-                    ('fasttext_random', 'zh-CN', 'es'),
+                    #('fasttext_random', 'zh-CN', 'es'),
                     ('fasttext_top', 'zh-CN', 'es'),
-                    ('fasttext_random', 'zh-CN', 'ru'),
+                    #('fasttext_random', 'zh-CN', 'ru'),
                     ('fasttext_top', 'zh-CN', 'ru'),
-                    ('fasttext_random', 'zh-CN', 'de'),
+                    #('fasttext_random', 'zh-CN', 'de'),
                     ('fasttext_top', 'zh-CN', 'de'),
-                    ('fasttext_random', 'es', 'en'),
+                    #('fasttext_random', 'es', 'en'),
                     ('fasttext_top', 'es', 'en'),
-                    ('fasttext_random', 'es', 'de'),
+                    #('fasttext_random', 'es', 'de'),
                     ('fasttext_top', 'es', 'de'),
-                    ('fasttext_random', 'es', 'ru'),
+                    #('fasttext_random', 'es', 'ru'),
                     ('fasttext_top', 'es', 'ru'),
-                    ('fasttext_random', 'es', 'zh-CN'),
-                    ('fasttext_top', 'es', 'zh-CN')
-                    #('zeroshot', 'en', 'it')
+                    #('fasttext_random', 'es', 'zh-CN'),
+                    #('fasttext_top', 'es', 'zh-CN')
+
                     ]
 
     md = ''
@@ -293,26 +344,47 @@ if __name__ == '__main__':
         lg1_dict = make_dict(lg1_vocab, lg1_vectors)
         lg2_dict = make_dict(lg2_vocab, lg2_vectors)
 
+        print('Translation: '+lg1+'->'+lg2+'\n')
+
         # Train/Test Vocab/Vectors
         vocab_train, vocab_test = vocab_train_test(embedding, lg1, lg2, lg1_vocab)
         X_train, X_test, y_train, y_test = vectors_train_test(vocab_train,
                                                               vocab_test)
 
         # Fit tranlation matrix to training data
-        model, history, T, D = translation_matrix(X_train, y_train)
+        model, history, T, D, tf = translation_matrix(X_train, y_train)
+
+        print('biggest element:'+str(np.max(T))+'\n')
+
+        #print(T)
+        #print(tf)
+        #print('Determinant: '+str(D)+'\n')
+
+        #print(tf)
 
         # Test Data Results
         results_df = translation_results(X_test, y_test, vocab_test, T,
-                                         lg2_vectors, lg2_vocab)
+                                        lg2_vectors, lg2_vocab)
+
+
 
         # Result plots and report
         T_norm_EDA(results_df)
         isotropy = T_pca_EDA(T)
-        md += T_report_results(embedding, lg1, lg2, lg1_vectors, lg2_vectors,
-                               X_train, X_test, D, results_df, isotropy)
 
-    # Save report
-    md_header = '# Translation Matrix Results  \n'
-    with open('../reports1/translation_matrix_report.md', mode='w') as f:
-        f.write(md_header + md)
-    K.clear_session()
+        print('Isotropy: '+ str(isotropy)+'\n')
+
+        # svd
+
+        U,s,Vh = svd(T)
+
+        print(len(s))
+
+    #     md += T_report_results(embedding, lg1, lg2, lg1_vectors, lg2_vectors,
+    #                            X_train, X_test, D, results_df, isotropy)
+    #
+    # # Save report
+    # md_header = '# Translation Matrix Results  \n'
+    # with open('../reports1/translation_matrix_report.md', mode='w') as f:
+    #     f.write(md_header + md)
+    # K.clear_session()
