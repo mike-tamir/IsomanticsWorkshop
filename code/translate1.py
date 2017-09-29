@@ -1,4 +1,5 @@
 from keras import backend as K
+from keras import regularizers
 import numpy as np
 from gensim_download import pickle_rw
 from keras.layers import Dense
@@ -99,18 +100,19 @@ def vectors_train_test(vocab_train, vocab_test):
 def translation_matrix(X_train, y_train):
     """Fit translation matrix T"""
     model = Sequential()
-    model.add(Dense(300, use_bias=False, input_shape=(X_train.shape[1],)))
+    model.add(Dense(300, use_bias=False, input_shape=(X_train.shape[1],),kernel_regularizer=regularizers.l2(0.01)))
     model.compile(loss='mse', optimizer='adam')
     history = model.fit(X_train, y_train, batch_size=128, epochs=20,
                         verbose=False)
     T = model.get_weights()[0]
 
 
-    M = np.matrix(T)
+
+    M = np.matrix(T)*100
 
     T_norm, T_normed = normalize(M)
 
-    D = round(np.linalg.det(T_normed),3)
+    D = round(np.linalg.det(M),3)
     #print(T_normed)
     #print(T_normed.getH())
 
