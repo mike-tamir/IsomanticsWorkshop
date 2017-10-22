@@ -4,7 +4,7 @@ import urllib
 import json
 from gensim_download import pickle_rw
 from vocab_vectors import embedding_languages_lgs
-
+import sys
 
 def translate_text(source_text, lg_from, lg_to):
     """
@@ -78,9 +78,12 @@ if __name__ == '__main__':
     # Load languages and lgs lists for embedding
     languages, lgs = embedding_languages_lgs(embedding)
 
+    lang_from = sys.argv[1]
+    lang_to = sys.argv[2]
+    
     # List of all (lg_from, lg_to) combinations
     translations = [(a, b) for a in lgs for b in lgs if a != b]
-    translations = [('es','zh-CN')]  # Temporary override
+    translations = [(lang_from,lang_to)]
 
     # For each combination of lgs
     for translation in translations:
