@@ -1,0 +1,6 @@
+# General Jupyter Noise/Checkpoints/etc
+.ipynb_checkpoints/
+derby.log
+metastore_db
+__pycache__/
+*.pyc
