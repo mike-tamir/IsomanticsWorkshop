@@ -1,0 +1,8 @@
+keras
+matplotlib
+pandas
+seaborn
+tensorflow
+pydrive
+sys
+argparse
