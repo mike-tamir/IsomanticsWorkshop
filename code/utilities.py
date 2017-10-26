@@ -9,6 +9,11 @@ from numpy.linalg import det
 from numpy.linalg import inv
 import bottleneck as bn
 import pandas as pd
+import argparse
+import matplotlib.pyplot as plt
+import seaborn as sns; sns.set()
+import pandas as pd
+
 
 def pickle_rw(*tuples,write=True):
     """Pickle object in each tuple to/from ../pickle folder
@@ -89,16 +94,6 @@ def vocab_train_test(embedding, lg1, lg2, lg1_vocab):
         else:
             pass
 
-        # if split == 'random':
-        #     sample = np.random.choice(len(vocab_2D), 900, replace=False)
-        #     vocab_train = np.asarray(vocab_2D)[sample[:700]].tolist()
-        #     vocab_test = np.asarray(vocab_2D)[sample[700:]].tolist()
-        # elif split == 'top':
-        #     sample = np.random.choice(range(900), 900, replace=False)
-        #     vocab_train = np.asarray(vocab_2D)[:700, :].tolist()
-        #     vocab_test = np.asarray(vocab_2D)[:200, :].tolist()
-        # else:
-        #     pass
 
     return vocab_train, vocab_test
 
@@ -116,8 +111,7 @@ def vectors_train_test(vocab_train, vocab_test,lg1_dict,lg2_dict):
 
 def translation_matrix(X_train, y_train):
     """Fit translation matrix T"""
-    #def norm_reg(weight_matrix):
-     #   return 0.01 * np.linalg.norm(np.matrix(np.subtract(np.matmul(weight_matrix,weight_matrix.T,np.matmul(weight_matrix.T,weight_matrix))),'fro')
+    
     model = Sequential()
     model.add(Dense(300, use_bias=False, input_shape=(X_train.shape[1],),kernel_regularizer=nregularizer.l3(0.000001)))
     model.compile(loss='mse', optimizer='adam')
@@ -131,15 +125,9 @@ def translation_matrix(X_train, y_train):
 
     T_norm, T_normed = normalize(M)
 
-    #D = np.linalg.det(M)
-    
     I = inv(T)
     
     Fr_norm = np.linalg.norm(np.matrix(np.subtract(np.matmul(T,T.getH()),np.matmul(T.getH(),T))),'fro')
-
-    #print ("Determinant:"+str(D))
-    
-    #print ("Fr_norm:"+str(Fr_norm))
 
     if np.array_equal(np.around(np.matmul(T_normed,T_normed.getH())), np.around(np.matmul(T_normed.getH(),T_normed))) == True:
         tf = "True"
@@ -247,20 +235,8 @@ def T_norm_EDA(results_df):
     test_size = results_df.shape[0]
     test_accuracy = round(results_df.neighbor_correct.mean(), 2)
 
-    print('Test Accuracy: '+str(test_accuracy)+'\n')
-
     plot_data = ['X_norm', 'y_norm', 'yhat_norm', 'yhat_neighbor_norm']
-    # f, ax = plt.subplots(len(plot_data), sharex=True, sharey=True,
-    #                      figsize=(10, 10))
-    # for i, d in enumerate(plot_data):
-    #     ax[i].hist(results_df[d], bins=100)
-    #     ax[i].axis('off')
-    #     title = '{}: mean={}, std={}'.format(d, round(results_df[d].mean(), 2), round(results_df[d].std(), 2))
-    #     ax[i].set_title(title)
-    # f.subplots_adjust(hspace=0.7)
-    # plt.savefig('../images/' + lg1 + '_' + lg2 + '_' + embedding +
-    #             '_T_norm.png')
-    # plt.close('all')
+    
     return test_accuracy
 
 
@@ -270,18 +246,7 @@ def T_pca_EDA(T):
     pca = PCA().fit(T_ss)
     n = pca.n_components_
 
-    # plt.figure(figsize=(10, 6))
-    # plt.xlim((0, n))
-    # plt.ylim((0, 1))
-    # plt.plot(range(n + 1), [0] + np.cumsum(pca.explained_variance_ratio_).
-    #          tolist())
-    # plt.plot(range(n + 1), np.asarray(range(n + 1)) / n)
-    # plt.xlabel('Number of Eigenvectors')
-    # plt.ylabel('Explained Variance')
-    # plt.savefig('../images/' + lg1 + '_' + lg2 + '_' + embedding +
-    #             '_T_isotropy.png')
-    # plt.close('all')
-
+   
     isotropy = (1 - sum(np.cumsum(pca.explained_variance_ratio_) * 1 / n)) / .5
     return isotropy
 
@@ -323,3 +288,16 @@ def T_report_results(embedding, lg1, lg2, lg1_vectors, lg2_vectors,
         '_T_isotropy.png)  \n\n'
 
     return md
+
+def create_palette(p_from, p_to, separate, cmap_flag):
+    return sns.diverging_palette(p_from, p_to, sep=separate, as_cmap=cmap_flag)
+
+def read_csv(path):
+    return pd.read_csv(path)
+    
+def create_heatmap(df, c_map):
+    return sns.heatmap(df,cmap=c_map)
+
+def show_plot():
+    %matplotlib inline
+    return plt.show()
