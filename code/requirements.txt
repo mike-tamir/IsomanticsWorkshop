@@ -1,7 +1,0 @@
-keras
-matplotlib
-pandas
-seaborn
-tensorflow
-pydrive
-bottleneck
