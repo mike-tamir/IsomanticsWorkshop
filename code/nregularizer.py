@@ -61,6 +61,8 @@ def l2(l=0.01):
 def l3(l=0.01):
     return L1L2(l3=l)
 
+#Normalizer with regularization
+
 def l3_l2(l3=0.01, l2=0.01):
     return L1L2(l3=l3, l2=l2)
 
