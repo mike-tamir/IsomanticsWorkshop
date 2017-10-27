@@ -10,8 +10,8 @@ conda install seaborn
 conda install pandas
 conda install matplotlib
 
-conda install pydrive
-conda install bottleneck
+pip install pydrive
+pip install bottleneck
 
 # pip install tools/
 
