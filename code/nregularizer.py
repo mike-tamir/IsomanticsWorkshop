@@ -59,6 +59,9 @@ def l2(l=0.01):
     return L1L2(l2=l)
 
 def l3(l=0.01):
+    return L1L2(l3=l)
+
+def l3_l2(l3=0.01, l2=0.01):
     return L1L2(l3=l3, l2=l2)
 
 
