@@ -18,7 +18,12 @@ if __name__ == '__main__':
     
     parser = parse_arguments()
     parser.add_argument("--a", help="compute accuracy along with other statistics")
+    parser.add_argument("--e", help="specify name for the experiment folder")
     args = parser.parse_args()
+    
+    directory = ('../Spectral_Decomposition_Experiments/'+ args.e +'/T/')
+    
+    heatmapdir = ('../Spectral_Decomposition_Experiments/'+ args.e +'/heatmapdata/T/')
     
     if args.a:
         stats = ['min','max','mean','median','std','fro','acc']
@@ -38,12 +43,12 @@ if __name__ == '__main__':
     svd = {}
     svd1 = {}
     
-    print('Creating Translation Matrices for....:\n')
+    
     
     for translation in translations:
         embedding, lg1, lg2 = translation
         
-        T = load_csv('../Spectral_Decomposition_Experiments/test_l3_l2_T/T/{}_{}_T.csv'.format(lg1,lg2))   
+        T = load_csv(directory+'/{}_{}_T.csv'.format(lg1,lg2))   
         
         #T = convert_df_to_mat(T)
         
@@ -79,5 +84,5 @@ if __name__ == '__main__':
                 s_df.set_value(lang1,lang2,svd[stat,lang1,lang2])
                 s1_df.set_value(lang1,lang2,svd1[stat,lang1,lang2])
 
-        s_df.to_csv('../HeatmapData/T/s_{}.csv'.format(stat),columns = languages, index= False)
-        s1_df.to_csv('../HeatmapData/T/s1_{}.csv'.format(stat),columns = languages, index = False)
+        s_df.to_csv(heatmapdir +'/s_{}.csv'.format(stat),columns = languages, index= False)
+        s1_df.to_csv(heatmapdir +'/s1_{}.csv'.format(stat),columns = languages, index = False)

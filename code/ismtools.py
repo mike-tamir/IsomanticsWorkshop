@@ -6,6 +6,7 @@ from keras import backend as K
 from keras.utils.generic_utils import serialize_keras_object
 from keras.utils.generic_utils import deserialize_keras_object
 import pickle
+import os
 import numpy as np
 from keras.layers import Dense
 from keras.models import Sequential
@@ -113,8 +114,11 @@ def get(identifier):
 def parse_arguments():
     return argparse.ArgumentParser()
     
+def path_exists(directory):
+    return os.path.exists(directory)
 
-
+def make_dir(directory):
+    return os.makedirs(directory)
 
 def pickle_rw(*tuples,write=True):
     """Pickle object in each tuple to/from ../pickle folder
@@ -216,11 +220,17 @@ def vectors_train_test(vocab_train, vocab_test,lg1_dict,lg2_dict):
 
 
 
-def translation_matrix(X_train, y_train):
+def translation_matrix(X_train, y_train, mode):
     """Fit translation matrix T"""
     
     model = Sequential()
-    model.add(Dense(300, use_bias=False, input_shape=(X_train.shape[1],),kernel_regularizer=l3_l2(0.000001,0.01)))
+    if mode == "l2":
+        model.add(Dense(300, use_bias=False, input_shape=(X_train.shape[1],),kernel_regularizer=l2(0.01)))
+    if mode == "l3":
+        model.add(Dense(300, use_bias=False, input_shape=(X_train.shape[1],),kernel_regularizer=l3(0.000001)))
+    if mode == "l3_l2":
+        model.add(Dense(300, use_bias=False, input_shape=(X_train.shape[1],),kernel_regularizer=l3_l2(0.000001,0.01)))
+        
     model.compile(loss='mse', optimizer='adam')
     history = model.fit(X_train, y_train, batch_size=128, epochs=20,
                         verbose=False)

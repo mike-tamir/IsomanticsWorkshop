@@ -1,28 +1,33 @@
 from ismtools import parse_arguments
 from ismtools import pickle_rw
 from ismtools import make_dict
-
+from ismtools import path_exists
 from ismtools import vocab_train_test
 from ismtools import vectors_train_test
 from ismtools import translation_matrix
 from ismtools import convert_mat_to_df
-
+from ismtools import path_exists
+from ismtools import make_dir
 
 if __name__ == '__main__':
     # Manually set list of translations (embedding, lg1, lg2)
     
     parser = parse_arguments()
-    parser.add_argument("--a", help="compute accuracy along with other statistics")
+    #parser.add_argument("--a", help="compute accuracy along with other statistics")
+    parser.add_argument("--e", help="specify name for the experiment folder")
+    parser.add_argument("--m", help="specify model for the experiment")
     args = parser.parse_args()
     
-    if args.a:
-        stats = ['min','max','mean','median','std','fro','acc']
-    else:
-        stats = ['min','max','mean','median','std','fro']
+    mode = args.m
+    
+    directory = ('../Spectral_Decomposition_Experiments/'+args.e+'/T/')
+    
+    if not path_exists(directory):
+        make_dir(directory) 
     
     svds = ['s','s1']
     languages = ['en','ru','de','es','fr','it', 'zh-CN']
-    
+ 
     
     translations=[]
     
@@ -56,14 +61,12 @@ if __name__ == '__main__':
  
         
         # Fit tranlation matrix to training data
-        model, history, T, tf,I, M, fro = translation_matrix(X_train, y_train)
+        model, history, T, tf,I, M, fro = translation_matrix(X_train, y_train, mode)
         
         #covariance_T = T.dot(T.T) 
         
         T = convert_mat_to_df(T)
         
-        
-
-        T.to_csv('../Spectral_Decomposition_Experiments/test_l3_l2_T/T/{}_{}_T.csv'.format(lg1,lg2), header=False, index= False)
+        T.to_csv(directory+'/{}_{}_T.csv'.format(lg1,lg2), header=False, index= False)
         
       
