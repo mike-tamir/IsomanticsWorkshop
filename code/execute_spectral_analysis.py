@@ -26,6 +26,7 @@ if __name__ == '__main__':
                                      log_spectrum=True,
                                      normality=True,
                                      determinant=True,
+                                     ortho_norm=True,
                                      verbose=0
                                     )
 

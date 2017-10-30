@@ -451,6 +451,16 @@ def normality_val(matrix):
     matrix_normality = np.linalg.norm(np.matrix(np.subtract(np.matmul(T,T_trans),np.matmul(T_trans,T))),'fro')
     return matrix_normality
 
+def ortho_normality(matrix):
+    """
+    calculates the l2 norm of ||MM^{T}-I||_2
+    """
+    # Identy matrix
+    I = np.identity(matrix.shape[0])
+
+    # calc ortho_norm
+    ortho_norm = np.linalg.norm(np.matrix(np.subtract(np.dot(matrix,matrix.T),I)),'fro')
+    return ortho_norm
 
 def add_svd_stats(matrix,
                   matrix_dict,
@@ -458,7 +468,8 @@ def add_svd_stats(matrix,
                   calc_SVD=False,
                   log_spectrum=False,
                   normality=False,
-                  determinant=False
+                  determinant=False,
+                  ortho_norm=False
                  ):
     """
     Adds selected stats to the T_matrix_dict and returns dict with added stats
@@ -474,9 +485,14 @@ def add_svd_stats(matrix,
     # Load Normality of the matrix
     if normality==True:
         matrix_dict["normality"] = normality_val(matrix)
+
     # Load determinant of the matrix
     if determinant==True:
         matrix_dict["determinant"] = np.linalg.det(matrix)
+
+    # Load ortho normality measure of the matrix
+    if determinant==True:
+        matrix_dict["ortho_norm"] = ortho_normality(matrix)
 
     # Load the SVD
     if calc_SVD==True:
@@ -511,7 +527,8 @@ def extract_T_matrix_dict(T_matrix_dir,
                           calc_SVD=True,
                           log_spectrum=True,
                           normality=True,
-                          determinant=True,
+                          determinant=False,
+                          ortho_norm=False,
                           verbose=0
                          ):
     """
@@ -571,7 +588,8 @@ def extract_T_matrix_dict(T_matrix_dir,
                                                                     calc_SVD=calc_SVD,
                                                                     log_spectrum=log_spectrum,
                                                                     normality=normality,
-                                                                    determinant=determinant
+                                                                    determinant=determinant,
+                                                                    ortho_norm=ortho_norm
                                                                    )
 
 
@@ -590,7 +608,8 @@ def extract_T_matrix_dict(T_matrix_dir,
                                                                      calc_SVD=calc_SVD,
                                                                      log_spectrum=log_spectrum,
                                                                      normality=normality,
-                                                                     determinant=determinant
+                                                                     determinant=determinant,
+                                                                     ortho_norm=ortho_norm
                                                                     )
 
 
@@ -610,7 +629,8 @@ def extract_T_matrix_dict(T_matrix_dir,
                                                                      calc_SVD=calc_SVD,
                                                                      log_spectrum=log_spectrum,
                                                                      normality=normality,
-                                                                     determinant=determinant
+                                                                     determinant=determinant,
+                                                                     ortho_norm=ortho_norm
                                                                     )
 
     return T_matrix_dict
