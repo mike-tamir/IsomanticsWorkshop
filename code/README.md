@@ -1,7 +1,3 @@
-
-
-
-
 ## Isomantics Spectral analysis
 - `Spectral_decomposition_driver_notebook_main.ipynb`
     - This is the main workshop notebook
