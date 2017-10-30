@@ -457,7 +457,8 @@ def add_svd_stats(matrix,
                   stats,
                   calc_SVD=False,
                   log_spectrum=False,
-                  normality=False
+                  normality=False,
+                  determinant=False
                  ):
     """
     Adds selected stats to the T_matrix_dict and returns dict with added stats
@@ -473,6 +474,9 @@ def add_svd_stats(matrix,
     # Load Normality of the matrix
     if normality==True:
         matrix_dict["normality"] = normality_val(matrix)
+    # Load determinant of the matrix
+    if determinant==True:
+        matrix_dict["determinant"] = np.linalg.det(matrix)
 
     # Load the SVD
     if calc_SVD==True:
@@ -507,6 +511,7 @@ def extract_T_matrix_dict(T_matrix_dir,
                           calc_SVD=True,
                           log_spectrum=True,
                           normality=True,
+                          determinant=True,
                           verbose=0
                          ):
     """
@@ -518,7 +523,7 @@ def extract_T_matrix_dict(T_matrix_dir,
     calc_cov:      Boolean if default True, will process the covariance matrix and spectra in dict with key 'T_cov'
     calc_inv:      Boolean if default True, will process the matrix inverse and spectra in dict with key 'T_inv'
 
-    calc_SVD:      Boolean if default True, will process the SVD of the T_matrix, and also calc_cov and calc_inv if
+    calc_SVD:      [depricated all values calc SVD stats] Boolean if default True, will process the SVD of the T_matrix, and also calc_cov and calc_inv if
                    they are set to true and add to the dict:
 
                    U rotation numpy array 2d with key 'U_rotation'
@@ -528,6 +533,7 @@ def extract_T_matrix_dict(T_matrix_dir,
 
     log_spectrum:  Boolean if default True, adds to dict log of the spectral values list with key 'log_spectral_values'
     normality:     Boolean if default True, adds to dict the L2 norm of ||TT* - T*T|| with key 'normality'
+    determinant:   Boolean if default True, adds to dict the determinant
     """
     # Create a list of items in T_matrix_dir
     T_matrix_dir_items = os.listdir(T_matrix_dir)
@@ -564,7 +570,8 @@ def extract_T_matrix_dict(T_matrix_dir,
                                                                     stats=stats,
                                                                     calc_SVD=calc_SVD,
                                                                     log_spectrum=log_spectrum,
-                                                                    normality=normality
+                                                                    normality=normality,
+                                                                    determinant=determinant
                                                                    )
 
 
@@ -582,7 +589,8 @@ def extract_T_matrix_dict(T_matrix_dir,
                                                                      stats=stats,
                                                                      calc_SVD=calc_SVD,
                                                                      log_spectrum=log_spectrum,
-                                                                     normality=normality
+                                                                     normality=normality,
+                                                                     determinant=determinant
                                                                     )
 
 
@@ -601,7 +609,8 @@ def extract_T_matrix_dict(T_matrix_dir,
                                                                      stats=stats,
                                                                      calc_SVD=calc_SVD,
                                                                      log_spectrum=log_spectrum,
-                                                                     normality=normality
+                                                                     normality=normality,
+                                                                     determinant=determinant
                                                                     )
 
     return T_matrix_dict

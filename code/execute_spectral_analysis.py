@@ -19,14 +19,15 @@ if __name__ == '__main__':
 
         # execute statistical analysis of translations spectra
         full = extract_T_matrix_dict(T_matrix_dir=T_matrix_dir,
-                                 stats=['min','max','mean','median','std'],
-                                 calc_cov=True,
-                                 calc_inv=False,
-                                 calc_SVD=True,
-                                 log_spectrum=True,
-                                 normality=True,
-                                 verbose=0
-                                )
+                                     stats=['min','max','mean','median','std'],
+                                     calc_cov=True,
+                                     calc_inv=False,
+                                     calc_SVD=True,
+                                     log_spectrum=True,
+                                     normality=True,
+                                     determinant=True,
+                                     verbose=0
+                                    )
 
         print("Translation Spectra Analyzed writing json to the following path:\n%s" % (out_json_path))
 
