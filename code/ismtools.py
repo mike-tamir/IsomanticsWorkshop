@@ -7,6 +7,7 @@ from keras.utils.generic_utils import serialize_keras_object
 from keras.utils.generic_utils import deserialize_keras_object
 import pickle
 import os
+import json
 import numpy as np
 from keras.layers import Dense
 from keras.models import Sequential
@@ -431,6 +432,12 @@ def show_plot():
 ###############################
 ### Spectral Analysis Tools ###
 ###############################
+def read_json(json_path):
+    with open(json_path, "r") as jpath:
+        new_dict = json.load(jpath)
+    jpath.close()
+    return new_dict
+
 def normality_val(matrix):
     """
     matrix: numpy 2d array
