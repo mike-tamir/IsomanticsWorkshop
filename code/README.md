@@ -1,6 +1,7 @@
 ## Isomantics Spectral analysis
 - `Spectral_decomposition_driver_notebook_main.ipynb`
-    - This is the main workshop notebook
+    - This is the main workshop notebook.
+    - In order to run this notebook, use the setup instructions in the root repo directory.
 
 
 ## Python scripts:
@@ -44,4 +45,3 @@
     - Trains the translation matrix T
     - Calculates the test performance of the translation
     - Creates the results report and saves locally to the reports subfolder
-
