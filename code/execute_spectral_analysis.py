@@ -24,6 +24,7 @@ if __name__ == '__main__':
                                      calc_inv=False,
                                      calc_SVD=True,
                                      log_spectrum=True,
+                                     condition_num=True,
                                      normality=True,
                                      determinant=True,
                                      ortho_norm=True,

@@ -121,7 +121,7 @@ def path_exists(directory):
 def make_dir(directory):
     return os.makedirs(directory)
 
-def pickle_rw(*tuples,write=True):
+def pickle_rw(*tuples, write=True):
     """Pickle object in each tuple to/from ../pickle folder
     tuples = the filenames and objects to pickle ('name', name)"""
     result = []
@@ -469,7 +469,8 @@ def add_svd_stats(matrix,
                   log_spectrum=False,
                   normality=False,
                   determinant=False,
-                  ortho_norm=False
+                  ortho_norm=False,
+                  condition_num=False
                  ):
     """
     Adds selected stats to the T_matrix_dict and returns dict with added stats
@@ -501,11 +502,26 @@ def add_svd_stats(matrix,
         matrix_dict["U_rotation"] = U
         matrix_dict["V_rotation_transpose"] = Vh
         matrix_dict["spectral_values"] = s
+        # print('matrix_dict["spectral_values"]',list(matrix_dict["spectral_values"]))
 
         # Conduct spectrum stats analysis
         for stat in stats:
             matrix_dict[stat] = stat_calc(stat, s, fro=None, acc=None)
 
+        # Add condition_num from spectral_values
+        if condition_num==True:
+            if "max" in stats:
+                spec_max = matrix_dict["max"]
+                if "min" in stats:
+                    spec_min = matrix_dict["min"]
+
+                    matrix_dict["condition_num"] = spec_max/spec_min
+                    matrix_dict["log_condition_num"] = log(spec_max)-log(spec_min)
+                    print(matrix_dict["condition_num"],matrix_dict["log_condition_num"]) ###***###
+                else:
+                    print("Cannot calculate 'condition_number' must have 'min' value in stats.")
+            else:
+                print("Cannot calculate 'condition_number' must have 'max' value in stats.")
 
         # Add log spectrum
         if log_spectrum==True:
@@ -526,6 +542,7 @@ def extract_T_matrix_dict(T_matrix_dir,
                           calc_inv=False,
                           calc_SVD=True,
                           log_spectrum=True,
+                          condition_num=True,
                           normality=True,
                           determinant=False,
                           ortho_norm=False,
@@ -549,8 +566,12 @@ def extract_T_matrix_dict(T_matrix_dir,
 
 
     log_spectrum:  Boolean if default True, adds to dict log of the spectral values list with key 'log_spectral_values'
+    condition_num: Boolean if default True, the ratio between the largest and smallest singular value
     normality:     Boolean if default True, adds to dict the L2 norm of ||TT* - T*T|| with key 'normality'
-    determinant:   Boolean if default True, adds to dict the determinant
+    determinant:   Boolean if default False, adds to dict the determinant
+    ortho_norm:    Boolean if default False, adds to dict the ||MM^{T}-I||_2
+                   where M is the matrix and I is the identity matrix
+
     """
     # Create a list of items in T_matrix_dir
     T_matrix_dir_items = os.listdir(T_matrix_dir)
@@ -572,8 +593,13 @@ def extract_T_matrix_dict(T_matrix_dir,
                 print("Skipping %s item in %s: extension is not '.csv'" % (T_matrix_name,T_matrix_dir))
 
         else:
+            # Initialize matricies to match keys with matrix arrays
+            matricies = {}
+
             # Load in csv as numpy array
             T_matrix = np.loadtxt(open(T_matrix_full_path), delimiter=",")
+            matricies["T_matrix"]=T_matrix
+
 
             ### Add matrices to T_matrix_dict under Lg1-Lg-2 key
             T_matrix_dict[T_matrix_lgs] = {}
@@ -581,58 +607,40 @@ def extract_T_matrix_dict(T_matrix_dir,
             # Initialize raw T_matrix key
             T_matrix_dict[T_matrix_lgs]["T_matrix"] = {}
 
-            # Load T_matrix and spectral analysis stats as configured into T_matrix sub dict
-            T_matrix_dict[T_matrix_lgs]["T_matrix"] = add_svd_stats(matrix=T_matrix,
-                                                                    matrix_dict=T_matrix_dict[T_matrix_lgs]["T_matrix"],
-                                                                    stats=stats,
-                                                                    calc_SVD=calc_SVD,
-                                                                    log_spectrum=log_spectrum,
-                                                                    normality=normality,
-                                                                    determinant=determinant,
-                                                                    ortho_norm=ortho_norm
-                                                                   )
-
-
-            # T_cov Covariance matrix TT^{T}
+            # construct list of matrices to pull SVD stats on
+            matrix_keys = ["T_matrix"]
             if calc_cov==True:
-                # calculate T_cov
+                # Add to list of matricies to be processed
+                matrix_keys += ["T_cov"]
+                # Calculate T_cov Covariance matrix TT^{T}
                 T_cov = np.dot(T_matrix,T_matrix.T)
+                matricies["T_cov"]=T_cov
 
                 # Initialize T_cov key
                 T_matrix_dict[T_matrix_lgs]["T_cov"] = {}
 
-                # Load T_cov and spectral analysis stats as configured into T_cov sub dict
-                T_matrix_dict[T_matrix_lgs]["T_cov"] = add_svd_stats(matrix=T_cov,
-                                                                     matrix_dict=T_matrix_dict[T_matrix_lgs]["T_cov"],
-                                                                     stats=stats,
-                                                                     calc_SVD=calc_SVD,
-                                                                     log_spectrum=log_spectrum,
-                                                                     normality=normality,
-                                                                     determinant=determinant,
-                                                                     ortho_norm=ortho_norm
-                                                                    )
-
-
-
-            # T_inv Matrix Inverse T^{-1}
             if calc_inv==True:
-                # calculate T_inv
+                # Add to list of matricies to be processed
+                matrix_keys += ["T_inv"]
+                # Calculate T_inv Matrix Inverse T^{-1}
                 T_inv = np.linalg.inv(T_matrix)
-
+                matricies["T_inv"]=T_inv
                 # Initialize T_inv key
                 T_matrix_dict[T_matrix_lgs]["T_inv"] = {}
 
-                # Load T_inv and spectral analysis stats as configured into T_inv sub dict
-                T_matrix_dict[T_matrix_lgs]["T_inv"] = add_svd_stats(matrix=T_inv,
-                                                                     matrix_dict=T_matrix_dict[T_matrix_lgs]["T_inv"],
-                                                                     stats=stats,
-                                                                     calc_SVD=calc_SVD,
-                                                                     log_spectrum=log_spectrum,
-                                                                     normality=normality,
-                                                                     determinant=determinant,
-                                                                     ortho_norm=ortho_norm
-                                                                    )
 
+            for matrix_key in matrix_keys:
+                # Load T_matrix and spectral analysis stats as configured into T_matrix sub dict
+                T_matrix_dict[T_matrix_lgs][matrix_key] = add_svd_stats(matrix=matricies[matrix_key],
+                                                                        matrix_dict=T_matrix_dict[T_matrix_lgs][matrix_key],
+                                                                        stats=stats,
+                                                                        calc_SVD=calc_SVD,
+                                                                        log_spectrum=log_spectrum,
+                                                                        normality=normality,
+                                                                        determinant=determinant,
+                                                                        ortho_norm=ortho_norm,
+                                                                        condition_num=condition_num
+                                                                       )
     return T_matrix_dict
 
 # Removing the matrices if needed
