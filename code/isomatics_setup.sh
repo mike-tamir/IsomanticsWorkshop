@@ -12,10 +12,3 @@ conda install matplotlib
 
 pip install pydrive
 pip install bottleneck
-
-# pip install tools/
-
-
-
-#pip install pydrive
-#pip install bottleneck
