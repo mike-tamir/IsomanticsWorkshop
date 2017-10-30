@@ -113,7 +113,7 @@ def get(identifier):
 
 def parse_arguments():
     return argparse.ArgumentParser()
-    
+
 def path_exists(directory):
     return os.path.exists(directory)
 
@@ -138,17 +138,17 @@ def pickle_rw(*tuples,write=True):
         return result[0]
     else:
         return result
-    
+
 def make_df(rows, cols):
     df = pd.DataFrame(0.0, index=rows,columns=cols)
     return df
-    
+
 def convert_mat_to_df(T):
     return pd.DataFrame(T)
 
 def convert_df_to_mat(T):
     return np.matrix(T)
-    
+
 def make_dict(vocab, vectors):
     """Make dictionary of vocab and vectors"""
     return {vocab[i]: vectors[i] for i in range(len(vocab))}
@@ -222,7 +222,7 @@ def vectors_train_test(vocab_train, vocab_test,lg1_dict,lg2_dict):
 
 def translation_matrix(X_train, y_train, mode):
     """Fit translation matrix T"""
-    
+
     model = Sequential()
     if mode == "l2":
         model.add(Dense(300, use_bias=False, input_shape=(X_train.shape[1],),kernel_regularizer=l2(0.01)))
@@ -230,7 +230,7 @@ def translation_matrix(X_train, y_train, mode):
         model.add(Dense(300, use_bias=False, input_shape=(X_train.shape[1],),kernel_regularizer=l3(0.000001)))
     if mode == "l3_l2":
         model.add(Dense(300, use_bias=False, input_shape=(X_train.shape[1],),kernel_regularizer=l3_l2(0.000001,0.01)))
-        
+
     model.compile(loss='mse', optimizer='adam')
     history = model.fit(X_train, y_train, batch_size=128, epochs=20,
                         verbose=False)
@@ -243,7 +243,7 @@ def translation_matrix(X_train, y_train, mode):
     T_norm, T_normed = normalize(M)
 
     I = inv(T)
-    
+
     Fr_norm = np.linalg.norm(np.matrix(np.subtract(np.matmul(T,T.getH()),np.matmul(T.getH(),T))),'fro')
 
     if np.array_equal(np.around(np.matmul(T_normed,T_normed.getH())), np.around(np.matmul(T_normed.getH(),T_normed))) == True:
@@ -278,11 +278,11 @@ def T_svd_EDA(s):
     """Perform SVD on the translation matrix 'T' """
     plt.hist(s, bins='auto', range = (0,1),normed = 1)
     plt.show()
-    
+
 
 def calc_fro(T):
     return np.linalg.norm(np.matrix(np.subtract(np.matmul(T,T.transpose()),np.matmul(T.transpose(),T))),'fro')
-    
+
 def stat_calc(stat, s, fro, acc):
         if stat=='min':
             return min(s)
@@ -359,7 +359,7 @@ def T_norm_EDA(results_df):
     test_accuracy = round(results_df.neighbor_correct.mean(), 2)
 
     plot_data = ['X_norm', 'y_norm', 'yhat_norm', 'yhat_neighbor_norm']
-    
+
     return test_accuracy
 
 
@@ -369,7 +369,7 @@ def T_pca_EDA(T):
     pca = PCA().fit(T_ss)
     n = pca.n_components_
 
-   
+
     isotropy = (1 - sum(np.cumsum(pca.explained_variance_ratio_) * 1 / n)) / .5
     return isotropy
 
@@ -426,3 +426,312 @@ def create_heatmap(df, c_map):
 
 def show_plot():
     return plt.show()
+
+
+###############################
+### Spectral Analysis Tools ###
+###############################
+def normality_val(matrix):
+    """
+    matrix: numpy 2d array
+    RETURNS
+    A measure of the "closeness to normality" of matrix as follows: ||M*M - MM*||_2
+    where the norm is taken as the L2 norm for matrices and M is the matrix
+    Normal matrices should score 0.
+    """
+    T = matrix
+    T_trans = matrix.transpose()
+    matrix_normality = np.linalg.norm(np.matrix(np.subtract(np.matmul(T,T_trans),np.matmul(T_trans,T))),'fro')
+    return matrix_normality
+
+
+def add_svd_stats(matrix,
+                  matrix_dict,
+                  stats,
+                  calc_SVD=False,
+                  log_spectrum=False,
+                  normality=False
+                 ):
+    """
+    Adds selected stats to the T_matrix_dict and returns dict with added stats
+    matrix:        numpy array of the matrix to be processed to add to matrix_dict
+    matrix_dict:    dictionary with matrix to be added to processing matrix
+    stats:          list statistics to store on the spectrum of the T_matrix
+    log_spectrum:   Boolean if True (default) will run analysis on the log
+                    of the spectrum too.
+    """
+    # Load the actual matrix
+    matrix_dict["matrix"] = matrix
+
+    # Load Normality of the matrix
+    if normality==True:
+        matrix_dict["normality"] = normality_val(matrix)
+
+    # Load the SVD
+    if calc_SVD==True:
+        # Run SVD and add to sub keys
+        U,s,Vh = SVD(matrix)
+        matrix_dict["U_rotation"] = U
+        matrix_dict["V_rotation_transpose"] = Vh
+        matrix_dict["spectral_values"] = s
+
+        # Conduct spectrum stats analysis
+        for stat in stats:
+            matrix_dict[stat] = stat_calc(stat, s, fro=None, acc=None)
+
+
+        # Add log spectrum
+        if log_spectrum==True:
+            sl = log(s)
+            matrix_dict["log_spectral_values"]= sl
+
+            # Conduct log spectrum stats analysis
+            for stat in stats:
+                stat_of_log=stat+"_log"
+                matrix_dict[stat_of_log] = stat_calc(stat, sl, fro=None, acc=None)
+
+    return matrix_dict
+
+
+def extract_T_matrix_dict(T_matrix_dir,
+                          stats=['min','max','mean','median','std'],
+                          calc_cov=True,
+                          calc_inv=False,
+                          calc_SVD=True,
+                          log_spectrum=True,
+                          normality=True,
+                          verbose=0
+                         ):
+    """
+    T_matrix_dir:  str location of the dir with the csv files for the translation matrices
+
+    stats:         list of statistics to calculate on spectrum and log specturm if calc_SVD and
+                   log_spectrum are set to True respectively
+
+    calc_cov:      Boolean if default True, will process the covariance matrix and spectra in dict with key 'T_cov'
+    calc_inv:      Boolean if default True, will process the matrix inverse and spectra in dict with key 'T_inv'
+
+    calc_SVD:      Boolean if default True, will process the SVD of the T_matrix, and also calc_cov and calc_inv if
+                   they are set to true and add to the dict:
+
+                   U rotation numpy array 2d with key 'U_rotation'
+                   V* rotation numpy array 2d with key 'V_rotation_trans'
+                   Spectral values list with key 'spectral_values'
+
+
+    log_spectrum:  Boolean if default True, adds to dict log of the spectral values list with key 'log_spectral_values'
+    normality:     Boolean if default True, adds to dict the L2 norm of ||TT* - T*T|| with key 'normality'
+    """
+    # Create a list of items in T_matrix_dir
+    T_matrix_dir_items = os.listdir(T_matrix_dir)
+
+    # Loop through list of paths to process each matrix
+    T_matrix_dict = {}
+    for T_matrix_name in T_matrix_dir_items:
+
+        # Create path name
+        T_matrix_full_path = os.path.join(T_matrix_dir, T_matrix_name)
+
+        # Extract language strings and extensions
+        [T_matrix_lgs, T_matrix_ext] = T_matrix_name.split(".")
+        T_matrix_lgs = T_matrix_lgs.rstrip("_T")
+
+        # Filter for non csv extensions
+        if T_matrix_ext != "csv":
+            if verbose >= 1:
+                print("Skipping %s item in %s: extension is not '.csv'" % (T_matrix_name,T_matrix_dir))
+
+        else:
+            # Load in csv as numpy array
+            T_matrix = np.loadtxt(open(T_matrix_full_path), delimiter=",")
+
+            ### Add matrices to T_matrix_dict under Lg1-Lg-2 key
+            T_matrix_dict[T_matrix_lgs] = {}
+
+            # Initialize raw T_matrix key
+            T_matrix_dict[T_matrix_lgs]["T_matrix"] = {}
+
+            # Load T_matrix and spectral analysis stats as configured into T_matrix sub dict
+            T_matrix_dict[T_matrix_lgs]["T_matrix"] = add_svd_stats(matrix=T_matrix,
+                                                                    matrix_dict=T_matrix_dict[T_matrix_lgs]["T_matrix"],
+                                                                    stats=stats,
+                                                                    calc_SVD=calc_SVD,
+                                                                    log_spectrum=log_spectrum,
+                                                                    normality=normality
+                                                                   )
+
+
+            # T_cov Covariance matrix TT^{T}
+            if calc_cov==True:
+                # calculate T_cov
+                T_cov = np.dot(T_matrix,T_matrix.T)
+
+                # Initialize T_cov key
+                T_matrix_dict[T_matrix_lgs]["T_cov"] = {}
+
+                # Load T_cov and spectral analysis stats as configured into T_cov sub dict
+                T_matrix_dict[T_matrix_lgs]["T_cov"] = add_svd_stats(matrix=T_cov,
+                                                                     matrix_dict=T_matrix_dict[T_matrix_lgs]["T_cov"],
+                                                                     stats=stats,
+                                                                     calc_SVD=calc_SVD,
+                                                                     log_spectrum=log_spectrum,
+                                                                     normality=normality
+                                                                    )
+
+
+
+            # T_inv Matrix Inverse T^{-1}
+            if calc_inv==True:
+                # calculate T_inv
+                T_inv = np.linalg.inv(T_matrix)
+
+                # Initialize T_inv key
+                T_matrix_dict[T_matrix_lgs]["T_inv"] = {}
+
+                # Load T_inv and spectral analysis stats as configured into T_inv sub dict
+                T_matrix_dict[T_matrix_lgs]["T_inv"] = add_svd_stats(matrix=T_inv,
+                                                                     matrix_dict=T_matrix_dict[T_matrix_lgs]["T_inv"],
+                                                                     stats=stats,
+                                                                     calc_SVD=calc_SVD,
+                                                                     log_spectrum=log_spectrum,
+                                                                     normality=normality
+                                                                    )
+
+    return T_matrix_dict
+
+
+
+### Creating the heatmaps ###
+def make_heatmap(T_matrix_dict,
+                 matrix_type,
+                 stat,
+                 language_order= ['en','ru','de','es','fr','it', 'zh-CN'],
+                 upper_matrix_type= False
+                ):
+    """
+    Makes a heatmap for the specified stat and matrix_type from the T_matrix_dict
+
+    matrix_dict:       dictionary with structure {'lg1_lg2':{"matrix_type":{stats:values}}}
+    matrix_type:       string in {'T_matrix', 'T_cov', 'T_inv'} to build the heatmap from
+    stat:              specific statistic to populate the heatmap
+    language_order:    order of the rows and columns of the heatmap
+    upper_matrix_type: Boolean or string, default False
+                       If False, all values will be filled in with stats from matrix_type.
+                       If str in {'T_matrix', 'T_cov', 'T_inv'} upper matrix will be filled
+                       with stats from that matrix type
+    """
+    # Initialize the heatmap df with 0s
+    df = make_df(language_order, language_order)
+
+    # Loop through the language combos (or upper right combos)
+    for i in range(len(language_order)):
+        for j in range(len(language_order)):
+            lg1 = language_order[i]
+            lg2 = language_order[j]
+
+            # Make language translation key from languages
+            lg_key = str(lg1)+"_"+str(lg2)
+            if lg_key not in T_matrix_dict.keys():
+                print("Skipping %s: translation stats not available" % lg_key)
+
+            # Pull value
+            value = T_matrix_dict[lg_key][matrix_type][stat]
+
+            # Adjust upper vals if configured
+            if upper_matrix_type==False:
+                upper_value = value
+            else:
+                upper_value = T_matrix_dict[lg_key][upper_matrix_type][stat]
+
+            # Update value based on upper tri config
+            if j<=i:
+                df.set_value(lg1,lg2,value)
+            else:
+                df.set_value(lg1,lg2,upper_value)
+    return df
+
+def plot_heatmaps(T_matrix_dict,
+                  plotted_stats,
+                  display_opt="cols",
+                  matrix_types=["T_matrix"],
+                  low_c=10,
+                  high_c=130,
+                  sep_num=8,
+                  figuresize=[12,9]
+                 ):
+    """
+    Plots Heatmaps from the T_matrix_dict generated by extract_T_matrix_dict
+
+    T_matrix_dict:  dictionary containing translation matrices, and spectral analysis of them
+    plotted_stats:   list of generated point spectral analysis statistics to be plotted
+    display_opt:    str in {"cols","num"} if "cols" (default) heatmaps with colors generated
+    matrix_types:    List subset of ["T_matrix","T_cov","T_inv"] if "T_inv" only upper triangle
+                    is plotted with T_matrix
+    low_c:          num, coolest color spectrum number for heatmap
+    high_c:         num, warmest color spectrum number for heatmap
+    sep_num:        num, number of separators to use for heatmap
+    """
+
+    heatmaps={}
+    for matrix_type in matrix_types:
+        matrix_type_hmaps = {}
+
+        # Initialize matrix_type plotting arguments
+        upper_matrix_type = False
+        matrix_type_used = matrix_type
+
+        # plot only upper triangle with T_inv
+        if matrix_type=="T_inv":
+            matrix_type_used = "T_matrix"
+            upper_matrix_type = "T_inv"
+
+        for stat in plotted_stats:
+            heatmap = make_heatmap(T_matrix_dict=T_matrix_dict,
+                                   matrix_type=matrix_type_used,
+                                   stat=stat,
+                                   language_order= ['en','ru','de','es','fr','it', 'zh-CN'],
+                                   upper_matrix_type=upper_matrix_type
+                                  )
+
+            # Set title
+            if matrix_type=="T_matrix":
+                title = "%s of the translation matrix spectrum" % stat
+
+            elif matrix_type=="T_cov":
+                title = "%s of the translation covariance matrix spectrum" % stat
+
+            elif matrix_type=="T_inv":
+                title = "%s of the translation matrix spectrum with inverse" % stat
+
+
+
+            if display_opt=="cols":
+
+                # Adjust colmap direction based on heatmap
+                mean_diag = np.diag(heatmap).mean()
+                hm_mean = np.array(heatmap).mean()
+
+                if mean_diag>=hm_mean:
+                    colmap = sns.diverging_palette(low_c, high_c, sep=sep_num, as_cmap=True)
+                else:
+                    colmap = sns.diverging_palette(high_c, low_c, sep=sep_num, as_cmap=True)
+
+                # figure sizing
+                plt.figure(figsize=(figuresize[0],figuresize[1]))
+                hm = sns.heatmap(heatmap,cmap=colmap)
+                #sns.plotting_context(font_scale=5)
+                #title = hm.set_title(title)
+
+                # Plot
+                print(title)
+                plt.show()
+                hm
+            else:
+                print(title)
+                display(heatmap)
+            matrix_type_hmaps[stat] = heatmap
+
+        # Add dict for that matrix type to full heatmap dict
+        heatmaps[matrix_type]=matrix_type_hmaps
+
+    return heatmaps
