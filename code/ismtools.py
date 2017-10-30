@@ -599,6 +599,22 @@ def extract_T_matrix_dict(T_matrix_dir,
 
     return T_matrix_dict
 
+# Removing the matrices if needed
+def T_matrix_point_stats(full_dict,
+                         out_list=['matrix', 'U_rotation', 'V_rotation_transpose', 'spectral_values', 'log_spectral_values']
+                        ):
+    """
+    removes out_list matrices from 3 levels down in full_dict
+    """
+    out_dict={}
+    for key1 in full_dict.keys():
+        out_dict[key1]={}
+        for key2 in full_dict[key1].keys():
+            out_dict[key1][key2]={}
+            for key3 in full_dict[key1][key2].keys():
+                if key3 not in out_list:
+                    out_dict[key1][key2][key3]=full_dict[key1][key2][key3]
+    return out_dict
 
 
 ### Creating the heatmaps ###
