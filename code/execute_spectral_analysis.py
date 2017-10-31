@@ -18,12 +18,8 @@ if __name__ == '__main__':
         # specify outpath for json
         out_json_path = "../data/"+sys.argv[1]+"/spec_analysis_stats.json"
 
-        if sys.argv[2] == "True":
-            print("true")
-            statistics = ['min','max','mean','median','std','fro','acc']
-        else:
-            statistics = ['min','max','mean','median','std','fro']
-        
+        statistics = ['min','max','mean','median','std','fro']
+
         # execute statistical analysis of translations spectra
         full = extract_T_matrix_dict(T_matrix_dir=T_matrix_dir,
                                      stats = statistics,
