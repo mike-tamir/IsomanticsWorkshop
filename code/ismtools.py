@@ -42,10 +42,10 @@ class L1L2(Regularizer):
         l2: Float; L2 regularization factor.
     """
 
-    def __init__(self, l1=0., l2=0., l3 =0.):
+    def __init__(self, l1=0., l2=0., normality =0.):
         self.l1 = K.cast_to_floatx(l1)
         self.l2 = K.cast_to_floatx(l2)
-        self.l3 = K.cast_to_floatx(l3)
+        self.normality = K.cast_to_floatx(normality)
 
     def __call__(self, x):
         regularization = 0.
@@ -53,14 +53,14 @@ class L1L2(Regularizer):
             regularization += K.sum(self.l1 * K.abs(x))
         if self.l2:
             regularization += K.sum(self.l2 * K.square(x))
-        if self.l3:
-            regularization += K.sum(self.l3 * K.square(tf.subtract(K.dot(x,K.transpose(x)),K.dot(K.transpose(x),x))))
+        if self.normality:
+            regularization += K.sum(self.normality * K.square(tf.subtract(K.dot(x,K.transpose(x)),K.dot(K.transpose(x),x))))
         return regularization
 
     def get_config(self):
         return {'l1': float(self.l1),
                 'l2': float(self.l2),
-                'l3': float(self.l3)}
+                'normality': float(self.normality)}
 
 
 # Aliases.
@@ -73,13 +73,13 @@ def l1(l=0.01):
 def l2(l=0.01):
     return L1L2(l2=l)
 
-def l3(l=0.01):
-    return L1L2(l3=l)
+def normality(l=0.01):
+    return L1L2(normality=l)
 
 #Normalizer with regularization
 
-def l3_l2(l3=0.01, l2=0.01):
-    return L1L2(l3=l3, l2=l2)
+def normality_l2(normality=0.01, l2=0.01):
+    return L1L2(normality=normality, l2=l2)
 
 
 def l1_l2(l1=0.01, l2=0.01):
@@ -191,7 +191,7 @@ def vocab_train_test(embedding, lg1, lg2, lg1_vocab):
                 if lg1_word_R:
 #                     if lg1_word.lower() == lg1_word_R.lower():
                     vocab_2D.append((lg1_word, lg1_word_T))
-        print('length of '+ lg1+'-'+ lg2+ ' vocab: '+str(len(vocab_2D)))
+        #print('length of '+ lg1+'-'+ lg2+ ' vocab: '+str(len(vocab_2D)))
 
         #Create Train/Test vocab
 
@@ -221,18 +221,37 @@ def vectors_train_test(vocab_train, vocab_test,lg1_dict,lg2_dict):
 
 
 
-def translation_matrix(X_train, y_train, mode):
+def translation_matrix(X_train, y_train, dimensions = 300, loss_func="mse", regularizer="normality_l2", l2_lambda=.01, normality_lambda = .000001 ):
     """Fit translation matrix T"""
 
     model = Sequential()
-    if mode == "l2":
-        model.add(Dense(300, use_bias=False, input_shape=(X_train.shape[1],),kernel_regularizer=l2(0.01)))
-    if mode == "l3":
-        model.add(Dense(300, use_bias=False, input_shape=(X_train.shape[1],),kernel_regularizer=l3(0.000001)))
-    if mode == "l3_l2":
-        model.add(Dense(300, use_bias=False, input_shape=(X_train.shape[1],),kernel_regularizer=l3_l2(0.000001,0.01)))
+    
+    X_train = np.resize(X_train,(np.shape(X_train)[0],dimensions))
+    y_train = np.resize(y_train,(np.shape(y_train)[0],dimensions))
+    
+    model.add(Dense(dimensions, 
+                    use_bias=False, 
+                    input_shape=(X_train.shape[1],)))
+    
+    if regularizer == "l2":
+        model.add(Dense(dimensions,
+                        use_bias=False,
+                        input_shape=(X_train.shape[1],),
+                        kernel_regularizer=l2(l2_lambda)))
+    
+    if regularizer == "normality":
+        model.add(Dense(dimensions, 
+                        use_bias=False, 
+                        input_shape=(X_train.shape[1],), 
+                        kernel_regularizer = normality(normality_lambda)))
+    
+    if regularizer == "normality_l2":
+        model.add(Dense(dimensions, 
+                        use_bias=False, 
+                        input_shape=(X_train.shape[1],),
+                        kernel_regularizer=normality_l2(normality_lambda, l2_lambda)))
 
-    model.compile(loss='mse', optimizer='adam')
+    model.compile(loss = loss_func, optimizer='adam')
     history = model.fit(X_train, y_train, batch_size=128, epochs=20,
                         verbose=False)
     T = model.get_weights()[0]
@@ -428,6 +447,21 @@ def create_heatmap(df, c_map):
 def show_plot():
     return plt.show()
 
+def create_model_parameters_json(experiment,
+                                         regularizer,
+                                         loss_function,
+                                         dimensions,
+                                         l2_lambda,
+                                         normality_lambda):
+            model_parameters = {}
+            model_parameters['exp_name'] = experiment
+            model_parameters['reg_name'] = regularizer
+            model_parameters['loss_func'] = loss_function
+            model_parameters['dim'] = dimensions
+            model_parameters['l2_lambda'] = l2_lambda
+            model_parameters['normality_lambda'] = normality_lambda
+            return model_parameters
+
 
 ###############################
 ### Spectral Analysis Tools ###
@@ -504,9 +538,20 @@ def add_svd_stats(matrix,
         matrix_dict["spectral_values"] = s
         # print('matrix_dict["spectral_values"]',list(matrix_dict["spectral_values"]))
 
+        fro = calc_fro(matrix)
+            
+        if 'acc' in stats:
+            print("True")
+            results_df = translation_results(X_test, y_test, vocab_test, matrix,
+                                     lg2_vectors, lg2_vocab)
+            acc = T_norm_EDA(results_df)
+        else:
+            accuracy = None
+        
         # Conduct spectrum stats analysis
         for stat in stats:
-            matrix_dict[stat] = stat_calc(stat, s, fro=None, acc=None)
+            
+            matrix_dict[stat] = stat_calc(stat, s, fro, acc=accuracy)
 
         # Add condition_num from spectral_values
         if condition_num==True:
@@ -531,7 +576,7 @@ def add_svd_stats(matrix,
             # Conduct log spectrum stats analysis
             for stat in stats:
                 stat_of_log=stat+"_log"
-                matrix_dict[stat_of_log] = stat_calc(stat, sl, fro=None, acc=None)
+                matrix_dict[stat_of_log] = stat_calc(stat, sl, fro, acc=accuracy)
 
     return matrix_dict
 
@@ -601,7 +646,7 @@ def extract_T_matrix_dict(T_matrix_dir,
             matricies["T_matrix"]=T_matrix
 
 
-            ### Add matrices to T_matrix_dict under Lg1-Lg-2 key
+            ### Add matrices to T_matrix_dict under Lg1-Lg2 key
             T_matrix_dict[T_matrix_lgs] = {}
 
             # Initialize raw T_matrix key
