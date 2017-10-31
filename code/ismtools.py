@@ -517,7 +517,7 @@ def add_svd_stats(matrix,
 
                     matrix_dict["condition_num"] = spec_max/spec_min
                     matrix_dict["log_condition_num"] = log(spec_max)-log(spec_min)
-                    print(matrix_dict["condition_num"],matrix_dict["log_condition_num"]) ###***###
+                    # print(matrix_dict["condition_num"],matrix_dict["log_condition_num"])
                 else:
                     print("Cannot calculate 'condition_number' must have 'min' value in stats.")
             else:
