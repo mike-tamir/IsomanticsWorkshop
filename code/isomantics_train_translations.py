@@ -1,26 +1,30 @@
-from ismtools import parse_arguments
-from ismtools import pickle_rw
-from ismtools import make_dict
-from ismtools import path_exists
-from ismtools import vocab_train_test
-from ismtools import vectors_train_test
-from ismtools import translation_matrix
-from ismtools import convert_mat_to_df
-from ismtools import path_exists
-from ismtools import make_dir
+import sys
+import json
+from ismtools import create_model_parameters_json, parse_arguments, pickle_rw, make_dict, path_exists, vocab_train_test, vectors_train_test, translation_matrix, convert_mat_to_df, path_exists, make_dir
 
 if __name__ == '__main__':
     # Manually set list of translations (embedding, lg1, lg2)
     
     parser = parse_arguments()
     #parser.add_argument("--a", help="compute accuracy along with other statistics")
-    parser.add_argument("--e", help="specify name for the experiment folder")
-    parser.add_argument("--m", help="specify model for the experiment")
+    parser.add_argument("--exp_name", help="specify name for the experiment folder")
+    parser.add_argument("--reg_name", help="specify regularizer for the model")
+    parser.add_argument("--loss_func", help="specify loss function for the model")
+    parser.add_argument("--dim", help="specify no. of dimensions for the model")
+    parser.add_argument("--l2_lambda", help="specify lambda value for Frobenius L2 norm in the regularizer of the model")
+    parser.add_argument("--normality_lambda", help="specify lambda value for normalizer of the model")
     args = parser.parse_args()
     
-    mode = args.m
+    experiment = args.exp_name
+    regularizer = args.reg_name
+    loss_function = args.loss_func
+    dimensions = int(args.dim)
+    l2_lambda = float(args.l2_lambda)
+    normality_lambda = float(args.normality_lambda)
     
-    directory = ('../Spectral_Decomposition_Experiments/'+args.e+'/T/')
+    directory = ('../data/'+experiment+'/T_matrices/')
+    
+    out_json_path = "../data/"+experiment+"/model_parameters.json"
     
     if not path_exists(directory):
         make_dir(directory) 
@@ -37,6 +41,23 @@ if __name__ == '__main__':
     
     svd = {}
     svd1 = {}
+    
+    # Create dict for storing model parameters.
+        
+    out_dict = create_model_parameters_json(experiment,
+                                     regularizer,
+                                     loss_function,
+                                     dimensions,
+                                     l2_lambda,
+                                     normality_lambda)
+
+    # Write dict out as json
+
+    with open(out_json_path,"w") as jpath:
+        json.dump(out_dict, jpath)
+
+    jpath.close()
+    
     
     print('Creating Translation Matrices for....:\n')
     
@@ -60,13 +81,22 @@ if __name__ == '__main__':
                                                               vocab_test,lg1_dict,lg2_dict)
  
         
+        print(y_train.shape)
         # Fit tranlation matrix to training data
-        model, history, T, tf,I, M, fro = translation_matrix(X_train, y_train, mode)
+        model, history, T, tf,I, M, fro = translation_matrix(X_train, 
+                                                             y_train, 
+                                                             dimensions,
+                                                             loss_function, 
+                                                             regularizer,
+                                                             l2_lambda,
+                                                             normality_lambda)
         
-        #covariance_T = T.dot(T.T) 
+   
+        
+
         
         T = convert_mat_to_df(T)
         
         T.to_csv(directory+'/{}_{}_T.csv'.format(lg1,lg2), header=False, index= False)
         
-      
+   
