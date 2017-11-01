@@ -1,0 +1,1 @@
+{"normality_lambda": 1e-06, "exp_name": "dim_100_loss_mse_l2_10_normality_0_000001", "loss_func": "mse", "l2_lambda": 10.0, "reg_name": "normality_l2", "dim": 100}
