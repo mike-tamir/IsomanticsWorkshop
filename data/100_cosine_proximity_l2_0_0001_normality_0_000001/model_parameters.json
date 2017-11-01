@@ -1,1 +1,0 @@
-{"exp_name": "100_cosine_proximity_l2_0_0001_normality_0_000001", "reg_name": "normality_l2", "loss_func": "cosine_proximity", "dim": 100, "l2_lambda": 0.0001, "normality_lambda": 1e-06}
