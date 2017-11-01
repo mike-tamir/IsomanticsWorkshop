@@ -4,9 +4,3 @@ derby.log
 metastore_db
 __pycache__/
 *.pyc
-
-#data folders -  pickle,csv
-
-.pkl
-.csv
-Presentation.pdf
