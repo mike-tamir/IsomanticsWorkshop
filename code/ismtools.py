@@ -494,6 +494,12 @@ def ortho_normality(matrix):
 
     # calc ortho_norm
     ortho_norm = np.linalg.norm(np.matrix(np.subtract(np.dot(matrix,matrix.T),I)),'fro')
+    # scale by matrix size
+    shape = np.array(matrix).shape
+    denom = shape[0]*shape[1]
+
+    ortho_norm = ortho_norm/denom
+
     return ortho_norm
 
 def add_svd_stats(matrix,
