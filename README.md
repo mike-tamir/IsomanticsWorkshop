@@ -1,7 +1,7 @@
 # Isomantics workshop
 This repo was prepared for the Isomantics workshop Nov 2017.
 * The main workshop notebook is located here
-  * `code/Spectral_decomposition_driver_notebook_main.ipynb`
+  * `code/Isomantics_workshop_driver_notebook.ipynb`
 
 ## Setup
 In order to run the notebook you should
@@ -21,4 +21,4 @@ In order to run the notebook you should
   * Congratulations! Now your virtual environment is set up with everything you will need for the isomantics workshop.
 4. Launch jupyter notebook by typing the following code in the command line:
   * `jupyter notebook`
-5. Navigate to the `code/` dir and open `code/Spectral_decomposition_driver_notebook_main.ipynb` by clicking on the hyperlink.
+5. Navigate to the `code/` dir and open `code/Isomantics_workshop_driver_notebook.ipynb` by clicking on the hyperlink.
