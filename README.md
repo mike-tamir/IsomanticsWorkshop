@@ -1,4 +1,5 @@
 # Isomantics workshop
+## [Isomantics_Workship_gslides](https://goo.gl/FwH8wY)
 This repo was prepared for the Isomantics workshop Nov 2017.
 * The main workshop notebook is located here
   * `code/Isomantics_workshop_driver_notebook.ipynb`
