@@ -1,5 +1,5 @@
 # Reports Readme
-## [Isomantics_Workship_gslides](https://goo.gl/FwH8wY)
+## [Isomantics_Workshop_gslides](https://goo.gl/FwH8wY)
 * Presentation of early experimental results and heatmaps analysis of spectral stats.
 * Click on the headding title to view these gSlides.
 
