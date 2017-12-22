@@ -13,6 +13,8 @@ if __name__ == '__main__':
     parser.add_argument("--dim", help="specify no. of dimensions for the model")
     parser.add_argument("--l2_lambda", help="specify lambda value for Frobenius L2 norm in the regularizer of the model")
     parser.add_argument("--normality_lambda", help="specify lambda value for normalizer of the model")
+    parser.add_argument("--orthonormality_lambda", help="specify lambda value for normalizer of the model")
+
     args = parser.parse_args()
     
     experiment = args.exp_name
@@ -21,6 +23,7 @@ if __name__ == '__main__':
     dimensions = int(args.dim)
     l2_lambda = float(args.l2_lambda)
     normality_lambda = float(args.normality_lambda)
+    orthonormality_lambda = float(args.orthonormality_lambda)
     
     directory = ('../data/'+experiment+'/T_matrices/')
     
@@ -30,7 +33,8 @@ if __name__ == '__main__':
         make_dir(directory) 
     
     svds = ['s','s1']
-    languages = ['en','ru','de','es','fr','it', 'zh-CN']
+    #languages = ['en','ru','de','es','fr','it', 'zh-CN']
+    languages = ['en','la','ru','de','es','fr','it','zh-CN','zh-TW']
  
     
     translations=[]
@@ -49,7 +53,8 @@ if __name__ == '__main__':
                                      loss_function,
                                      dimensions,
                                      l2_lambda,
-                                     normality_lambda)
+                                     normality_lambda,
+                                     orthonormality_lambda)
 
     # Write dict out as json
 
@@ -88,8 +93,8 @@ if __name__ == '__main__':
                                                              dimensions,
                                                              loss_function, 
                                                              regularizer,
-                                                             l2_lambda,
-                                                             normality_lambda)
+                                                             l2_lambda,                        
+                                                             orthonormality_lambda)
         
    
         
