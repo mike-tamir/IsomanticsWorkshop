@@ -42,10 +42,11 @@ class L1L2(Regularizer):
         l2: Float; L2 regularization factor.
     """
 
-    def __init__(self, l1=0., l2=0., normality =0.):
+    def __init__(self, l1=0., l2=0., normality =0.,orthonormality=0.):
         self.l1 = K.cast_to_floatx(l1)
         self.l2 = K.cast_to_floatx(l2)
         self.normality = K.cast_to_floatx(normality)
+        self.orthonormality = K.cast_to_floatx(orthonormality)
 
     def __call__(self, x):
         regularization = 0.
@@ -55,12 +56,16 @@ class L1L2(Regularizer):
             regularization += K.sum(self.l2 * K.square(x))
         if self.normality:
             regularization += K.sum(self.normality * K.square(tf.subtract(K.dot(x,K.transpose(x)),K.dot(K.transpose(x),x))))
+        if self.orthonormality:
+            regularization += tf.div(K.sum(self.orthonormality * K.square(tf.subtract(K.dot(x,K.transpose(x)),tf.eye(tf.shape(x)[0],dtype=tf.float32)))),tf.multiply(tf.to_float(tf.shape(x)[0]),tf.to_float(tf.shape(x)[1])))
         return regularization
 
     def get_config(self):
         return {'l1': float(self.l1),
                 'l2': float(self.l2),
-                'normality': float(self.normality)}
+                'normality': float(self.normality),
+                'orthonormality': float(self.orthonormality)}
+
 
 
 # Aliases.
@@ -76,10 +81,18 @@ def l2(l=0.01):
 def normality(l=0.01):
     return L1L2(normality=l)
 
-#Normalizer with regularization
+def orthonormality(l=0.01):
+    return L1L2(orthonormality=l)
+
+# Normalizer with regularization
 
 def normality_l2(normality=0.01, l2=0.01):
     return L1L2(normality=normality, l2=l2)
+
+# Orthonormality with regularization
+
+def orthonormality_l2(orthonormality=0.01, l2=0.01):
+    return L1L2(orthonormality=orthonormality, l2=l2)
 
 
 def l1_l2(l1=0.01, l2=0.01):
@@ -121,9 +134,10 @@ def path_exists(directory):
 def make_dir(directory):
     return os.makedirs(directory)
 
-def pickle_rw(*tuples, write=True):
+def pickle_rw(*tuples, write = True):
     """Pickle object in each tuple to/from ../pickle folder
-    tuples = the filenames and objects to pickle ('name', name)"""
+    tuples = the filenames and objects to pickle ('name', name)
+    """
     result = []
     for tup in tuples:
         fname, obj = tup
@@ -221,7 +235,7 @@ def vectors_train_test(vocab_train, vocab_test,lg1_dict,lg2_dict):
 
 
 
-def translation_matrix(X_train, y_train, dimensions = 300, loss_func="mse", regularizer="normality_l2", l2_lambda=.01, normality_lambda = .000001 ):
+def translation_matrix(X_train, y_train, dimensions = 300, loss_func="mse", regularizer="orthonormality_l2", l2_lambda=.01, orthonormality_lambda = .000001 ):
     """Fit translation matrix T"""
 
     model = Sequential()
@@ -250,6 +264,12 @@ def translation_matrix(X_train, y_train, dimensions = 300, loss_func="mse", regu
                         use_bias=False,
                         input_shape=(X_train.shape[1],),
                         kernel_regularizer=normality_l2(normality_lambda, l2_lambda)))
+
+    if regularizer == "orthonormality_l2":
+        model.add(Dense(dimensions,
+                        use_bias=False,
+                        input_shape=(X_train.shape[1],),
+                        kernel_regularizer=orthonormality_l2(orthonormality_lambda, l2_lambda)))
 
     model.compile(loss = loss_func, optimizer='adam')
     history = model.fit(X_train, y_train, batch_size=128, epochs=20,
@@ -452,7 +472,8 @@ def create_model_parameters_json(experiment,
                                          loss_function,
                                          dimensions,
                                          l2_lambda,
-                                         normality_lambda):
+                                         normality_lambda,
+                                         orthonormality_lambda):
             model_parameters = {}
             model_parameters['exp_name'] = experiment
             model_parameters['reg_name'] = regularizer
@@ -460,6 +481,7 @@ def create_model_parameters_json(experiment,
             model_parameters['dim'] = dimensions
             model_parameters['l2_lambda'] = l2_lambda
             model_parameters['normality_lambda'] = normality_lambda
+            model_parameters['orthonormality_lambda'] = orthonormality_lambda
             return model_parameters
 
 
@@ -716,7 +738,7 @@ def T_matrix_point_stats(full_dict,
 def make_heatmap(T_matrix_dict,
                  matrix_type,
                  stat,
-                 language_order= ['en','ru','de','es','fr','it', 'zh-CN'],
+                 language_order= ['en','la','ru','de','es','fr','it', 'zh-CN','zh-TW'],
                  upper_matrix_type= False
                 ):
     """
@@ -804,7 +826,7 @@ def plot_heatmaps(T_matrix_dict,
             heatmap = make_heatmap(T_matrix_dict=T_matrix_dict,
                                    matrix_type=matrix_type_used,
                                    stat=stat,
-                                   language_order= ['en','ru','de','es','fr','it', 'zh-CN'],
+                                   language_order= ['en','la','ru','de','es','fr','it', 'zh-CN','zh-TW'],
                                    upper_matrix_type=upper_matrix_type
                                   )
 
