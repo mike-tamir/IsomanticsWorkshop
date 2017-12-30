@@ -1,6 +1,6 @@
 import sys
 import json
-from ismtools import create_model_parameters_json, parse_arguments, pickle_rw, make_dict, path_exists, vocab_train_test, vectors_train_test, translation_matrix, convert_mat_to_df, path_exists, make_dir
+from ismtools import create_model_parameters_json, parse_arguments, pickle_rw, make_dict, path_exists, vocab_train_test, vectors_train_test, translation_matrix, translation_results, T_norm_EDA, convert_mat_to_df, path_exists, make_dir
 
 if __name__ == '__main__':
     # Manually set list of translations (embedding, lg1, lg2)
@@ -96,9 +96,14 @@ if __name__ == '__main__':
                                                              l2_lambda,                        
                                                              orthonormality_lambda)
         
-   
+        results_df = translation_results(X_test, y_test, vocab_test, T,
+                                         lg2_vectors, lg2_vocab)
+       
+        test_accuracy = T_norm_EDA(results_df)
         
-
+        acc = test_accuracy
+        
+        print('Accuracy:'+str(acc)+'\n')
         
         T = convert_mat_to_df(T)
         
