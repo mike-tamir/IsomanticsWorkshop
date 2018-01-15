@@ -11,6 +11,7 @@ if __name__ == '__main__':
     parser.add_argument("--reg_name", help="specify regularizer for the model")
     parser.add_argument("--loss_func", help="specify loss function for the model")
     parser.add_argument("--dim", help="specify no. of dimensions for the model")
+    parser.add_argument("--part_vocab", help="specify the part of vocab")
     parser.add_argument("--l2_lambda", help="specify lambda value for Frobenius L2 norm in the regularizer of the model")
     parser.add_argument("--normality_lambda", help="specify lambda value for normalizer of the model")
     parser.add_argument("--orthonormality_lambda", help="specify lambda value for normalizer of the model")
@@ -21,6 +22,7 @@ if __name__ == '__main__':
     regularizer = args.reg_name
     loss_function = args.loss_func
     dimensions = int(args.dim)
+    part_of_vocabulary = args.part_vocab
     l2_lambda = float(args.l2_lambda)
     normality_lambda = float(args.normality_lambda)
     orthonormality_lambda = float(args.orthonormality_lambda)
@@ -31,8 +33,10 @@ if __name__ == '__main__':
     
     if not path_exists(directory):
         make_dir(directory) 
+        
     
-    svds = ['s','s1']
+    
+    #svds = ['s','s1']
     #languages = ['en','ru','de','es','fr','it', 'zh-CN']
     languages = ['en','la','ru','de','es','fr','it','hi','bn','zh-CN']
  
@@ -43,8 +47,8 @@ if __name__ == '__main__':
         for lang2 in languages:
             translations.append(('fasttext_top',lang1, lang2))
     
-    svd = {}
-    svd1 = {}
+    #svd = {}
+    #svd1 = {}
     
     # Create dict for storing model parameters.
         
@@ -52,6 +56,7 @@ if __name__ == '__main__':
                                      regularizer,
                                      loss_function,
                                      dimensions,
+                                     part_of_vocabulary,
                                      l2_lambda,
                                      normality_lambda,
                                      orthonormality_lambda)
@@ -86,7 +91,7 @@ if __name__ == '__main__':
         print(lg1+'->'+lg2+'\n')
 
         # Train/Test Vocab/Vectors
-        vocab_train, vocab_test = vocab_train_test(embedding, lg1, lg2, lg1_vocab)
+        vocab_train, vocab_test = vocab_train_test(embedding, part_of_vocabulary, lg1, lg2, lg1_vocab)
         X_train, X_test, y_train, y_test = vectors_train_test(vocab_train,
                                                               vocab_test,lg1_dict,lg2_dict)
  
@@ -96,6 +101,7 @@ if __name__ == '__main__':
         model, history, T, tf,I, M, fro = translation_matrix(X_train, 
                                                              y_train, 
                                                              dimensions,
+                                                             #part_of_vocabulary,
                                                              loss_function, 
                                                              regularizer,
                                                              l2_lambda,                        

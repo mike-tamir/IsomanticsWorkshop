@@ -169,7 +169,7 @@ def make_dict(vocab, vectors):
     return {vocab[i]: vectors[i] for i in range(len(vocab))}
 
 
-def vocab_train_test(embedding, lg1, lg2, lg1_vocab):
+def vocab_train_test(embedding, part_of_vocabulary, lg1, lg2, lg1_vocab):
     """Create training and test vocabularies"""
     if embedding == 'zeroshot':
         with open('../data/zeroshot/transmat/data/' +
@@ -207,6 +207,21 @@ def vocab_train_test(embedding, lg1, lg2, lg1_vocab):
                     vocab_2D.append((lg1_word, lg1_word_T))
         #print('length of '+ lg1+'-'+ lg2+ ' vocab: '+str(len(vocab_2D)))
 
+        
+        #Select Part of Vocab
+        if part_of_vocabulary == 'f':
+            """f: First part of the Vocab"""
+            train_sample = np.asarray(vocab_2D)[:5000, :]
+            test_sample = np.asarray(vocab_2D)[:1500, :]
+        elif part_of_vocabulary == 's':
+            """s: Second part of the Vocab"""
+            train_sample = np.asarray(vocab_2D)[5000:10000, :]
+            test_sample = np.asarray(vocab_2D)[5000:6500, :]   
+        elif part_of_vocabulary == 'c':
+            """c: Complete Vocab"""
+            train_sample = np.asarray(vocab_2D)[:10000, :]
+            test_sample = np.asarray(vocab_2D)[:3000, :]  
+        
         #Create Train/Test vocab
 
         if split == 'random':
@@ -214,9 +229,9 @@ def vocab_train_test(embedding, lg1, lg2, lg1_vocab):
             vocab_train = np.asarray(vocab_2D)[sample[:5000]].tolist()
             vocab_test = np.asarray(vocab_2D)[sample[5000:]].tolist()
         elif split == 'top':
-            sample = np.random.choice(range(6500), 6500, replace=False)
-            vocab_train = np.asarray(vocab_2D)[:5000, :].tolist()
-            vocab_test = np.asarray(vocab_2D)[:1500, :].tolist()
+            #sample = np.random.choice(range(sample_size), sample_size, replace=False)
+            vocab_train = train_sample.tolist()
+            vocab_test = test_sample.tolist()
         else:
             pass
 
@@ -466,17 +481,19 @@ def show_plot():
     return plt.show()
 
 def create_model_parameters_json(experiment,
-                                         regularizer,
-                                         loss_function,
-                                         dimensions,
-                                         l2_lambda,
-                                         normality_lambda,
-                                         orthonormality_lambda):
+                                 regularizer,
+                                 loss_function,
+                                 dimensions,
+                                 part_of_vocabulary,
+                                 l2_lambda,
+                                 normality_lambda,
+                                 orthonormality_lambda):
             model_parameters = {}
             model_parameters['exp_name'] = experiment
             model_parameters['reg_name'] = regularizer
             model_parameters['loss_func'] = loss_function
             model_parameters['dim'] = dimensions
+            model_parameters['part_vocab'] = part_of_vocabulary
             model_parameters['l2_lambda'] = l2_lambda
             model_parameters['normality_lambda'] = normality_lambda
             model_parameters['orthonormality_lambda'] = orthonormality_lambda
