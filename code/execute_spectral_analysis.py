@@ -3,6 +3,7 @@ import json
 from ismtools import parse_arguments, extract_T_matrix_dict, T_matrix_point_stats
 from ismtools import translation_results
 from ismtools import translation_matrix
+from ismtools import read_json
 
 if __name__ == '__main__':
 
@@ -18,10 +19,16 @@ if __name__ == '__main__':
         # specify outpath for json
         out_json_path = "../data/"+sys.argv[1]+"/spec_analysis_stats.json"
 
-        statistics = ['min','max','mean','median','std','fro']
+        # specify inpath for accuracy dictionary json
+        acc_dict = read_json("../data/"+sys.argv[1]+"/acc_dict.json")
+        
+        
+        #statistics = ['min','max','mean','median','std','fro']
+        statistics = ['min','max','mean','median','std','fro','acc']
 
         # execute statistical analysis of translations spectra
         full = extract_T_matrix_dict(T_matrix_dir=T_matrix_dir,
+                                     acc_dict = acc_dict,
                                      stats = statistics,
                                      calc_cov=True,
                                      calc_inv=False,

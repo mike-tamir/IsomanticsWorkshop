@@ -243,9 +243,7 @@ def translation_matrix(X_train, y_train, dimensions = 300, loss_func="mse", regu
     X_train = np.resize(X_train,(np.shape(X_train)[0],dimensions))
     y_train = np.resize(y_train,(np.shape(y_train)[0],dimensions))
 
-    model.add(Dense(dimensions,
-                    use_bias=False,
-                    input_shape=(X_train.shape[1],)))
+    
 
     if regularizer == "l2":
         model.add(Dense(dimensions,
@@ -525,6 +523,7 @@ def ortho_normality(matrix):
     return ortho_norm
 
 def add_svd_stats(matrix,
+                  acc,
                   matrix_dict,
                   stats,
                   calc_SVD=False,
@@ -569,10 +568,11 @@ def add_svd_stats(matrix,
         fro = calc_fro(matrix)
 
         if 'acc' in stats:
-            print("True")
-            results_df = translation_results(X_test, y_test, vocab_test, matrix,
-                                     lg2_vectors, lg2_vocab)
-            acc = T_norm_EDA(results_df)
+            #print("True")
+            #results_df = translation_results(X_test, y_test, vocab_test, matrix,
+            #                         lg2_vectors, lg2_vocab)
+            #acc = T_norm_EDA(results_df)
+            accuracy  = acc 
         else:
             accuracy = None
 
@@ -610,6 +610,7 @@ def add_svd_stats(matrix,
 
 
 def extract_T_matrix_dict(T_matrix_dir,
+                          acc_dict,
                           stats=['min','max','mean','median','std'],
                           calc_cov=True,
                           calc_inv=False,
@@ -700,11 +701,13 @@ def extract_T_matrix_dict(T_matrix_dir,
                 matricies["T_inv"]=T_inv
                 # Initialize T_inv key
                 T_matrix_dict[T_matrix_lgs]["T_inv"] = {}
+                
 
 
             for matrix_key in matrix_keys:
                 # Load T_matrix and spectral analysis stats as configured into T_matrix sub dict
                 T_matrix_dict[T_matrix_lgs][matrix_key] = add_svd_stats(matrix=matricies[matrix_key],
+                                                                        acc = acc_dict[T_matrix_lgs],
                                                                         matrix_dict=T_matrix_dict[T_matrix_lgs][matrix_key],
                                                                         stats=stats,
                                                                         calc_SVD=calc_SVD,
@@ -738,7 +741,7 @@ def T_matrix_point_stats(full_dict,
 def make_heatmap(T_matrix_dict,
                  matrix_type,
                  stat,
-                 language_order= ['en','la','ru','de','es','fr','it', 'zh-CN','zh-TW'],
+                 language_order= ['en','la','ru','de','es','fr','it', 'hi', 'bn', 'zh-CN'],
                  upper_matrix_type= False
                 ):
     """
@@ -826,7 +829,7 @@ def plot_heatmaps(T_matrix_dict,
             heatmap = make_heatmap(T_matrix_dict=T_matrix_dict,
                                    matrix_type=matrix_type_used,
                                    stat=stat,
-                                   language_order= ['en','la','ru','de','es','fr','it', 'zh-CN','zh-TW'],
+                                   language_order= ['en','la','ru','de','es','fr','it', 'hi', 'bn', 'zh-CN'],
                                    upper_matrix_type=upper_matrix_type
                                   )
 

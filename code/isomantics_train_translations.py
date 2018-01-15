@@ -34,7 +34,7 @@ if __name__ == '__main__':
     
     svds = ['s','s1']
     #languages = ['en','ru','de','es','fr','it', 'zh-CN']
-    languages = ['en','la','ru','de','es','fr','it','zh-CN','zh-TW']
+    languages = ['en','la','ru','de','es','fr','it','hi','bn','zh-CN']
  
     
     translations=[]
@@ -66,6 +66,9 @@ if __name__ == '__main__':
     
     print('Creating Translation Matrices for....:\n')
     
+    acc_dict = {}
+    
+    
     for translation in translations:
         embedding, lg1, lg2 = translation
         # Vocab/Vectors/Dicts
@@ -77,6 +80,8 @@ if __name__ == '__main__':
                       write=False)
         lg1_dict = make_dict(lg1_vocab, lg1_vectors)
         lg2_dict = make_dict(lg2_vocab, lg2_vectors)
+        
+        #acc_dict[lg1+'_'+lg2] = {}
 
         print(lg1+'->'+lg2+'\n')
 
@@ -108,5 +113,15 @@ if __name__ == '__main__':
         T = convert_mat_to_df(T)
         
         T.to_csv(directory+'/{}_{}_T.csv'.format(lg1,lg2), header=False, index= False)
+        
+        #acc_dict = {}
+        
+        acc_dict[lg1+'_'+lg2] = acc
+    
+    out_acc_json_path = "../data/"+experiment+"/acc_dict.json"
+    with open(out_acc_json_path,"w") as jpath:
+            json.dump(acc_dict, jpath)
+
+    jpath.close()
         
    
