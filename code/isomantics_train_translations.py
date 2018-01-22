@@ -38,7 +38,7 @@ if __name__ == '__main__':
     
     #svds = ['s','s1']
     #languages = ['en','ru','de','es','fr','it', 'zh-CN']
-    languages = ['en','la','ru','de','es','fr','it','hi','bn','zh-CN']
+    languages = ['en','ru','de','es','fr','it','hi','bn']
  
     
     translations=[]

@@ -203,8 +203,8 @@ def vocab_train_test(embedding, part_of_vocabulary, lg1, lg2, lg1_vocab):
 
                 # Check if lg1_word and lg1_word_R are equal (lowercase)
                 if lg1_word_R:
-#                     if lg1_word.lower() == lg1_word_R.lower():
-                    vocab_2D.append((lg1_word, lg1_word_T))
+                    if lg1_word.lower() == lg1_word_R.lower():
+                        vocab_2D.append((lg1_word, lg1_word_T))
         #print('length of '+ lg1+'-'+ lg2+ ' vocab: '+str(len(vocab_2D)))
 
         
@@ -220,7 +220,7 @@ def vocab_train_test(embedding, part_of_vocabulary, lg1, lg2, lg1_vocab):
         elif part_of_vocabulary == 'c':
             """c: Complete Vocab"""
             train_sample = np.asarray(vocab_2D)[:10000, :]
-            test_sample = np.asarray(vocab_2D)[:1500, :]  
+            test_sample = np.asarray(vocab_2D)[:3000, :]  
         
         #Create Train/Test vocab
 
@@ -758,7 +758,7 @@ def T_matrix_point_stats(full_dict,
 def make_heatmap(T_matrix_dict,
                  matrix_type,
                  stat,
-                 language_order= ['en','la','ru','de','es','fr','it', 'hi', 'bn', 'zh-CN'],
+                 language_order= ['en','ru','de','es','fr','it', 'hi', 'bn'],
                  upper_matrix_type= False
                 ):
     """
@@ -846,7 +846,7 @@ def plot_heatmaps(T_matrix_dict,
             heatmap = make_heatmap(T_matrix_dict=T_matrix_dict,
                                    matrix_type=matrix_type_used,
                                    stat=stat,
-                                   language_order= ['en','la','ru','de','es','fr','it', 'hi', 'bn', 'zh-CN'],
+                                   language_order= ['en','ru','de','es','fr','it', 'hi', 'bn'],
                                    upper_matrix_type=upper_matrix_type
                                   )
 
