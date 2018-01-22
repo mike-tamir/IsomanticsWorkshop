@@ -220,7 +220,7 @@ def vocab_train_test(embedding, part_of_vocabulary, lg1, lg2, lg1_vocab):
         elif part_of_vocabulary == 'c':
             """c: Complete Vocab"""
             train_sample = np.asarray(vocab_2D)[:10000, :]
-            test_sample = np.asarray(vocab_2D)[:3000, :]  
+            test_sample = np.asarray(vocab_2D)[:1500, :]  
         
         #Create Train/Test vocab
 
