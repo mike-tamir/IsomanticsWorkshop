@@ -1,0 +1,1 @@
+{"normality_lambda": 1e-06, "orthonormality_lambda": 1e-06, "exp_name": "300_f_cosine_proximity_l2_0_0001_orthonormality_0_000001", "loss_func": "cosine_proximity", "part_vocab": "top_5k", "l2_lambda": 0.0001, "reg_name": "orthonormality_l2", "dim": 300}
