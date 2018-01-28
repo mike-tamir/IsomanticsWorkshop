@@ -22,10 +22,9 @@ if __name__ == '__main__':
         # specify inpath for accuracy dictionary json
         acc_dict = read_json("../data/"+sys.argv[1]+"/acc_dict.json")
         
-        
-        #statistics = ['min','max','mean','median','std','fro']
+       
         statistics = ['min','max','mean','median','std','fro','acc']
-
+        
         # execute statistical analysis of translations spectra
         full = extract_T_matrix_dict(T_matrix_dir=T_matrix_dir,
                                      acc_dict = acc_dict,

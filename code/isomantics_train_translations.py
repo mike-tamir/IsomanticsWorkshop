@@ -6,7 +6,7 @@ if __name__ == '__main__':
     # Manually set list of translations (embedding, lg1, lg2)
     
     parser = parse_arguments()
-    #parser.add_argument("--a", help="compute accuracy along with other statistics")
+    parser.add_argument("--a", help="compute accuracy along with other statistics")
     parser.add_argument("--exp_name", help="specify name for the experiment folder")
     parser.add_argument("--reg_name", help="specify regularizer for the model")
     parser.add_argument("--loss_func", help="specify loss function for the model")
@@ -18,6 +18,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     
+    accuracy = args.a
     experiment = args.exp_name
     regularizer = args.reg_name
     loss_function = args.loss_func
@@ -107,27 +108,28 @@ if __name__ == '__main__':
                                                              l2_lambda,                        
                                                              orthonormality_lambda)
         
-        results_df = translation_results(X_test, y_test, vocab_test, T,
-                                         lg2_vectors, lg2_vocab)
-       
-        test_accuracy = T_norm_EDA(results_df)
-        
-        acc = test_accuracy
-        
-        print('Accuracy:'+str(acc)+'\n')
-        
         T = convert_mat_to_df(T)
         
         T.to_csv(directory+'/{}_{}_T.csv'.format(lg1,lg2), header=False, index= False)
         
-        #acc_dict = {}
+        if accuracy:
+            results_df = translation_results(X_test, y_test, vocab_test, T,
+                                             lg2_vectors, lg2_vocab)
+
+            test_accuracy = T_norm_EDA(results_df)
+
+            acc = test_accuracy
+
+            print('Accuracy:'+str(acc)+'\n')
+
+            acc_dict[lg1+'_'+lg2] = acc
+        else:
+            acc_dict[lg1+'_'+lg2] = 1
         
-        acc_dict[lg1+'_'+lg2] = acc
-    
     out_acc_json_path = "../data/"+experiment+"/acc_dict.json"
     with open(out_acc_json_path,"w") as jpath:
             json.dump(acc_dict, jpath)
 
     jpath.close()
-        
+
    

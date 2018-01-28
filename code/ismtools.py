@@ -209,19 +209,25 @@ def vocab_train_test(embedding, part_of_vocabulary, lg1, lg2, lg1_vocab):
 
         
         #Select Part of Vocab
-        if part_of_vocabulary == 'f':
-            """f: First part of the Vocab"""
+        if part_of_vocabulary == 'top_5k':
             train_sample = np.asarray(vocab_2D)[:5000, :]
             test_sample = np.asarray(vocab_2D)[:1500, :]
-        elif part_of_vocabulary == 's':
-            """s: Second part of the Vocab"""
+        elif part_of_vocabulary == 'top_5-10k':
             train_sample = np.asarray(vocab_2D)[5000:10000, :]
             test_sample = np.asarray(vocab_2D)[5000:6500, :]   
-        elif part_of_vocabulary == 'c':
-            """c: Complete Vocab"""
-            train_sample = np.asarray(vocab_2D)[:10000, :]
-            test_sample = np.asarray(vocab_2D)[:3000, :]  
-        
+        elif part_of_vocabulary == 'top_5-20k':
+            train_sample = np.asarray(vocab_2D)[5000:20000, :]
+            test_sample = np.asarray(vocab_2D)[5000:9500, :]  
+        elif part_of_vocabulary == 'top_20k':
+            train_sample = np.asarray(vocab_2D)[:20000, :]
+            test_sample = np.asarray(vocab_2D)[:6000, :]
+        elif part_of_vocabulary == 'top_50k':
+            train_sample = np.asarray(vocab_2D)[:50000, :]
+            test_sample = np.asarray(vocab_2D)[:15000, :]
+        else:
+            train_sample = np.asarray(vocab_2D)[:5000, :]
+            test_sample = np.asarray(vocab_2D)[:1500, :]
+            
         #Create Train/Test vocab
 
         if split == 'random':
