@@ -112,7 +112,7 @@ if __name__ == '__main__':
         
         T.to_csv(directory+'/{}_{}_T.csv'.format(lg1,lg2), header=False, index= False)
         
-        if accuracy:
+        if accuracy == "y":
             results_df = translation_results(X_test, y_test, vocab_test, T,
                                              lg2_vectors, lg2_vocab)
 
@@ -123,7 +123,8 @@ if __name__ == '__main__':
             print('Accuracy:'+str(acc)+'\n')
 
             acc_dict[lg1+'_'+lg2] = acc
-        else:
+            
+        else accuracy == "n":
             acc_dict[lg1+'_'+lg2] = 1
         
     out_acc_json_path = "../data/"+experiment+"/acc_dict.json"
