@@ -1,49 +1,54 @@
 from urllib.request import urlopen
 from urllib.parse import urlencode
 import urllib
+from google.cloud import translate
 import json
 from gensim_download import pickle_rw
 from vocab_vectors import embedding_languages_lgs
 import sys
+from nltk.stem import WordNetLemmatizer
+import os
 
+# Enter Path for Credentials File
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="../data/key/client_secrets.json"
+
+
+lemmatizer = WordNetLemmatizer()
+lemmatizer.lemmatize("run",'v')
+
+      
 def translate_text(source_text, lg_from, lg_to):
     """
-    # Fakhri Abbas found and modified this function from
-    # http://codegist.net/snippet/python/google-translatepy_lotabout_python
-    Keyword arguments:
     lg_from -- The language code for the source text argument
     lg_to -- The language code for the translated language
     source_text -- Text to be translated
     """
+    # Instantiates a client
+    translate_client = translate.Client()
 
-    url = 'https://translate.googleapis.com/translate_a/single?'
+    # The text to translate
+    text = source_text
+    # The target language
+    target = lg_to
 
-    params = []
-    params.append('client=gtx')
-    params.append('sl=' + lg_from)
-    params.append('tl=' + lg_to)
-    params.append('hl=en-US')
-    params.append('dt=t')
-    params.append('dt=bd')
-    params.append('dj=1')
-    params.append('source=input')
-    params.append(urlencode({'q': source_text}))
-    url += '&'.join(params)
+    # Translates some text into Russian
+    translation = translate_client.translate(
+        text,
+        target_language=target)
 
-    try:
-        request = urllib.request.Request(url)
-        browser = "Mozilla/5.0 (X11; Linux x86_64; rv:45.0) "
-        browser += "Gecko/20100101 Firefox/45.0"
-        request.add_header('User-Agent', browser)
-        response = urllib.request.urlopen(request)
-        dictionary = json.loads(response.read().decode('utf8'))
-        return dictionary["sentences"][0]['trans']	
-    except SocketError as e:
-        if e.errno != errno.ECONNRESET:
-            raise # Not error we are looking for
-        pass # Handle error here.
+    #print(u'Text: {}'.format(text))
+    #print(u'Translation: {}'.format(translation['translatedText']))
+    # [END translate_quickstart]
+    return translation['translatedText']
 
+    
 
+    
+def lemmatize_word(word):
+    """Lemmatize the word before putting it to Dictionary"""
+    return lemmatizer.lemmatize(word,'v')
+    
+    
 def translate_vocab(vocab, lg_from, lg_to):
     """Pickle dictionary of translated vocab"""
     # Load the dictionary if it exists
@@ -63,7 +68,7 @@ def translate_vocab(vocab, lg_from, lg_to):
         counter += 1
         if counter % 100 == 0:
             print(counter)
-        if counter % 10000 == 0:
+        if counter % 1000 == 0:
             # Pickle dictionary
             pickle_rw((lg_from + '_' + lg_to, d))
     pickle_rw((lg_from + '_' + lg_to, d))
